@@ -1,0 +1,19 @@
+
+a:link{font-family:±¼¸²;font-size:10pt;color:black;text-decoration:none;}
+a:visited{font-family:±¼¸²;font-size:10pt;color:black;text-decoration:none;}
+a:active{font-family:±¼¸²;font-size:10pt;color:black;text-decoration:none;}
+a:hover{font-family:±¼¸²;font-size:10pt;color:red;text-decoration:none;} 
+
+       .yd{color:blue;font-size:10pt;font-family:±¼¸²;background:"ccffd6"} 
+       .kd{color:black;font-size:10pt;font-family:±¼¸²;background:skyblue}
+       .a{color:black;font-size:10pt;font-family:±¼¸²;background:"ffffff"}
+       .b{color:black;font-size:10pt;font-family:±¼¸²;background:"ccccff"}
+       .c{border:1pt solid DimGray DimGray DimGray DimGray}
+
+body { scrollbar-face-color:#ffffff;
+scrollbar-shadow-color:ccccff;
+scrollbar-highlight-color:ccccff;
+scrollbar-3dlight-color:#ffffff;
+scrollbar-darkshadow-color:#ffffff;
+scrollbar-track-color:#ffffff;
+scrollbar-arrow-color:ccccff; }

@@ -1,0 +1,30 @@
+BODY {FONT-SIZE: 9pt}
+TD {FONT-SIZE: 9pt}
+SELECT {FONT-SIZE: 9pt}
+INPUT {FONT-SIZE: 9pt}
+DIV {FONT-SIZE: 9pt}
+FORM {FONT-SIZE: 9pt}
+TEXTAREA {FONT-SIZE: 9pt}
+TR {FONT-SIZE: 9pt}
+P {FONT-SIZE: 9pt}
+BLOCKQUOTE {FONT-SIZE: 9pt}
+TD {FONT-SIZE: 9pt}
+BR {FONT-SIZE: 9pt}
+TD {FONT-SIZE: 9pt; COLOR: #333333; LINE-HEIGHT: 150%; FONT-FAMILY: "±¼¸²", "±¼¸²Ã¼", "µ¸¿ò", "µ¸¿òÃ¼"}
+A:link {FONT-SIZE: 9pt; COLOR: #333333; FONT-FAMILY: "±¼¸²", "±¼¸²Ã¼", "µ¸¿ò", "µ¸¿òÃ¼"; TEXT-DECORATION: none}
+A:visited {FONT-SIZE: 9pt; COLOR: #333333; FONT-FAMILY: "±¼¸²", "±¼¸²Ã¼", "µ¸¿ò", "µ¸¿òÃ¼"; TEXT-DECORATION: none}
+A:hover {FONT-SIZE: 9pt; COLOR: #2a40c6; FONT-FAMILY: "±¼¸²", "±¼¸²Ã¼", "µ¸¿ò", "µ¸¿òÃ¼"; TEXT-DECORATION: none}
+INPUT {BORDER-RIGHT: #afafaf 1px solid; BORDER-TOP: #afafaf 1px solid; BORDER-LEFT: #afafaf 1px solid; BORDER-BOTTOM: #afafaf 1px solid}
+INPUT.border {BORDER-RIGHT: medium none; BORDER-TOP: medium none; BORDER-LEFT: medium none; BORDER-BOTTOM: medium none}
+A.top:link {FONT-SIZE: 10pt; COLOR: #ffffff; TEXT-DECORATION: none}
+A.top:visited {FONT-SIZE: 10pt; COLOR: #ffffff; TEXT-DECORATION: none}
+A.top:active {FONT-SIZE: 10pt; COLOR: #ffffff; TEXT-DECORATION: none}
+A.top:hover {FONT-SIZE: 10pt; COLOR: #ffffff; TEXT-DECORATION: none}
+A.top {FONT-WEIGHT: bolder; COLOR: #ffffff; TEXT-DECORATION: none}
+A.chat:link {FONT-SIZE: 10pt; COLOR: #ffffff; TEXT-DECORATION: none}
+A.sub:link {FONT-SIZE: 10pt; COLOR: #333333; TEXT-DECORATION: none}
+A.sub:visited {FONT-SIZE: 10pt; COLOR: #333333; TEXT-DECORATION: none}
+A.sub:active {FONT-SIZE: 10pt; COLOR: #ffffff; TEXT-DECORATION: none}
+A.sub:hover {FONT-SIZE: 10pt; COLOR: #333333; TEXT-DECORATION: none}
+A.sub {FONT-WEIGHT: bolder; COLOR: #333333; TEXT-DECORATION: none}
+A.chat:link {FONT-SIZE: 10pt; COLOR: #333333; TEXT-DECORATION: none}
