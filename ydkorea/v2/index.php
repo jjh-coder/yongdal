@@ -1,6 +1,6 @@
 <?php
 /**
- * 용달코리아 v2 메인 페이지 (PHP 7.4.33)
+ * 용달코리아 v2 메인 페이지 (PHP 7.4.33, 반응형 웹)
  */
 require_once __DIR__ . '/includes/config.php';
 require_once __DIR__ . '/includes/functions.php';
@@ -108,8 +108,8 @@ include __DIR__ . '/includes/header.php';
 
 <main class="ydk-container ydk-main">
 
-  <!-- 1. 히어로 배너 -->
-  <section class="ydk-hero">
+  <!-- 1. 히어로 배너 (반응형 지원) -->
+  <section class="ydk-hero" aria-label="용달코리아 핵심 서비스 소개">
     <div class="ydk-hero-content">
       <div class="ydk-hero-badge"><i class="check circle icon"></i> 전국 화물·용달 직거래 네트워크</div>
       <h1 class="ydk-hero-title">
@@ -117,7 +117,7 @@ include __DIR__ . '/includes/header.php';
         한 통의 전화로 빠르고 친절하게
       </h1>
       <p class="ydk-hero-desc">
-        거품 없는 직거래 운송 요금과 검증된 전문 차주 연결로<br>
+        거품 없는 직거래 운송 요금과 검증된 전문 차주 연결로<br class="ydk-hide-mobile">
         소형 용달부터 대형 전국 화물까지 신속·정확하게 운송해 드립니다.
       </p>
       <div class="ydk-hero-actions">
@@ -134,8 +134,8 @@ include __DIR__ . '/includes/header.php';
     </div>
   </section>
 
-  <!-- 2. 상담 전 확인사항 안내 박스 -->
-  <section class="ui message ydk-notice-box">
+  <!-- 2. 상담 전 확인사항 안내 박스 (고대비 연초록 박스) -->
+  <section class="ui message ydk-notice-box" aria-label="상담 전 확인사항">
     <div class="header">
       <i class="info circle icon"></i> 상담 전화를 하실 때는 이런 내용을 꼭 알고서 전화해 주세요!
     </div>
@@ -146,13 +146,13 @@ include __DIR__ . '/includes/header.php';
     </ul>
   </section>
 
-  <!-- 3. 바로가기 15대 서비스 그리드 -->
-  <section class="ydk-quick-grid">
+  <!-- 3. 바로가기 15대 서비스 그리드 (반응형: 5열 -> 태블릿 3열 -> 모바일 2열) -->
+  <section class="ydk-quick-grid" aria-label="맞춤 차종 및 이사 서비스">
     <div class="ydk-section-header">
       <h2 class="ydk-section-title"><i class="th icon"></i> 맞춤 차종 및 이사 서비스</h2>
       <span class="ydk-section-sub">필요하신 화물 차종이나 이사 서비스를 선택하시면 상세 안내 페이지로 이동합니다.</span>
     </div>
-    <div class="ui five column grid">
+    <div class="ui five column doubling stackable grid">
       <?php foreach ($quickServices as $svc): ?>
         <div class="column">
           <a href="<?= e($svc['url']) ?>" class="ydk-service-card">
@@ -165,8 +165,8 @@ include __DIR__ . '/includes/header.php';
     </div>
   </section>
 
-  <!-- 4. 지역 차량 찾기 (서울 / 경기 / 광역시) -->
-  <section id="regionSection" class="ydk-region-section">
+  <!-- 4. 지역 차량 찾기 (서울 / 경기 / 광역시) - 모바일 터치 최적화 -->
+  <section id="regionSection" class="ydk-region-section" aria-label="전국 지역별 차량 직거래 안내">
     <div class="ydk-section-header">
       <h2 class="ydk-section-title"><i class="map marked alternate icon"></i> 전국 지역별 차량 직거래 안내</h2>
       <span class="ydk-section-sub">원하시는 지역을 클릭하시면 해당 지역에 등록된 차주와 바로 직거래 상담을 하실 수 있습니다.</span>
@@ -218,9 +218,9 @@ include __DIR__ . '/includes/header.php';
     </div>
   </section>
 
-  <!-- 5. 2단 위젯 (게시판 & 서비스 안내) -->
-  <section class="ydk-board-section">
-    <div class="ui two column grid">
+  <!-- 5. 2단 위젯 (반응형: PC 2열 -> 모바일 1열 스택) -->
+  <section class="ydk-board-section" aria-label="게시판 및 이용 안내">
+    <div class="ui two column stackable grid">
 
       <!-- 좌측: 공지사항 & 묻고답하기 -->
       <div class="column">
@@ -305,27 +305,27 @@ include __DIR__ . '/includes/header.php';
             <div class="ydk-step-item">
               <div class="ydk-step-num">STEP 1</div>
               <div class="ydk-step-title">전화 상담</div>
-              <div class="ydk-step-desc">1688-2404 견적 및 일정 접수</div>
+              <div class="ydk-step-desc">1688-2404 견적 접수</div>
             </div>
             <div class="ydk-step-item">
               <div class="ydk-step-num">STEP 2</div>
               <div class="ydk-step-title">차량 배차</div>
-              <div class="ydk-step-desc">최적 차종 및 전담 차주 지정</div>
+              <div class="ydk-step-desc">전담 차주 즉시 배정</div>
             </div>
             <div class="ydk-step-item">
               <div class="ydk-step-num">STEP 3</div>
               <div class="ydk-step-title">화물 상차</div>
-              <div class="ydk-step-desc">약속 시간 출발지 도착 및 적재</div>
+              <div class="ydk-step-desc">약속 시간 출발지 적재</div>
             </div>
             <div class="ydk-step-item">
               <div class="ydk-step-num">STEP 4</div>
               <div class="ydk-step-title">안전 운송</div>
-              <div class="ydk-step-desc">목적지까지 신속·안전 이동</div>
+              <div class="ydk-step-desc">신속·안전 목적지 이동</div>
             </div>
             <div class="ydk-step-item">
               <div class="ydk-step-num">STEP 5</div>
               <div class="ydk-step-title">하차 완료</div>
-              <div class="ydk-step-desc">도착지 확인 및 운송 완료</div>
+              <div class="ydk-step-desc">도착지 확인 운송 완료</div>
             </div>
           </div>
 
@@ -364,6 +364,15 @@ include __DIR__ . '/includes/header.php';
 
     </div>
   </section>
+
+  <!-- 6. 모바일 전용 하단 고정 전화 상담 바 (767px 이하에서만 노출) -->
+  <aside class="ydk-mobile-callbar" aria-label="모바일 즉시 전화상담">
+    <a href="tel:<?= SITE_PHONE_TEL ?>" class="ydk-mobile-callbar-btn">
+      <i class="phone icon"></i>
+      <span class="ydk-mobile-callbar-label">지금 바로 전화 상담</span>
+      <strong class="ydk-mobile-callbar-num"><?= SITE_PHONE ?></strong>
+    </a>
+  </aside>
 
 </main>
 

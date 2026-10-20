@@ -18,6 +18,7 @@ $metaDesc = isset($pageDescription) && $pageDescription !== ''
 <html lang="ko">
 <head>
   <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><?= $title ?></title>
   <meta name="description" content="<?= $metaDesc ?>">
   <meta name="keywords" content="용달코리아, 용달, 개인용달, 용달차, 개별용달, 전국화물, 리프트용달, 1톤트럭, 2.5톤, 5톤화물, 용달이사, 원룸이사, 지방화물, 화물운임">
@@ -40,7 +41,7 @@ $metaDesc = isset($pageDescription) && $pageDescription !== ''
       </div>
       <div>
         <a href="#" id="btnBookmark"><i class="star outline icon"></i> 즐겨찾기 추가</a>
-        <a href="<?= legacy('bbs/admin_setup.php') ?>"><i class="cog icon"></i> 관리자</a>
+        <a href="<?= url('admin/index.php') ?>"><i class="cog icon"></i> 관리자</a>
       </div>
     </div>
   </div>
@@ -66,8 +67,8 @@ $metaDesc = isset($pageDescription) && $pageDescription !== ''
     <nav class="ydk-nav-wrap">
       <div class="ydk-container">
         <div class="ui menu ydk-nav">
-          <a class="item" href="<?= legacy('main/info.html') ?>">회사 소개</a>
-          <a class="item" href="<?= legacy('main/online_con.html') ?>">온라인 상담</a>
+          <a class="item" href="<?= url('contents/info/compnay.php') ?>">회사 소개</a>
+          <a class="item" href="<?= url('contents/online/contact_us.php') ?>">온라인 상담</a>
           <a class="item" href="<?= legacy('main/tel_con.html') ?>">전화 상담 방법</a>
           <a class="item" href="<?= legacy('main/trt.html') ?>">운송 요금</a>
           <a class="item" href="<?= legacy('main/car_size.html') ?>">차량 규격</a>
