@@ -158,7 +158,7 @@ $st = $consult['status'] ?? '접수';
           </div>
 
           <div style="margin-top: 20px;">
-            <button type="submit" class="ui fluid button" style="background-color: var(--ydk-adm-primary); color: #FFFFFF; height: 46px; font-weight: 700; font-size: 16px;">
+            <button type="submit" class="ui fluid button" style="background-color: var(--ydk-adm-primary); color: var(--ydk-adm-on-primary); height: 46px; font-weight: 700; font-size: 16px;">
               <i class="save icon"></i> 저장하기
             </button>
           </div>

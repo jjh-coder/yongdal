@@ -134,7 +134,7 @@ include __DIR__ . '/includes/header.php';
     </div>
   </section>
 
-  <!-- 2. 상담 전 확인사항 안내 박스 (고대비 연초록 박스) -->
+  <!-- 2. 상담 전 확인사항 안내 박스 (고대비 연파랑 박스) -->
   <section class="ui message ydk-notice-box" aria-label="상담 전 확인사항">
     <div class="header">
       <i class="info circle icon"></i> 상담 전화를 하실 때는 이런 내용을 꼭 알고서 전화해 주세요!

@@ -93,7 +93,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       </div>
 
       <div style="margin-top: 26px;">
-        <button type="submit" class="ui fluid button" style="background-color: var(--ydk-adm-primary); color: #FFFFFF; height: 48px; font-size: 17px; font-weight: 700; border-radius: 8px;">
+        <button type="submit" class="ui fluid button" style="background-color: var(--ydk-adm-primary); color: var(--ydk-adm-on-primary); height: 48px; font-size: 17px; font-weight: 700; border-radius: 8px;">
           <i class="sign in alternate icon"></i> 로그인
         </button>
       </div>

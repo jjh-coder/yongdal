@@ -2,8 +2,9 @@
    용달코리아 v2 관리자 스타일시트 (admin.css)
    ======================================================== */
 :root {
-  --ydk-adm-primary: #1B6B3A;       /* 메인 깊은 초록 */
-  --ydk-adm-dark: #14532D;
+  --ydk-adm-primary: #6495ED;       /* 메인 Cornflower Blue */
+  --ydk-adm-on-primary: #1A1A1A;    /* 주조색 배경 위 글씨 (5.9:1) */
+  --ydk-adm-dark: #4169E1;
   --ydk-adm-accent: #C2410C;      /* 포인트 주황 */
   --ydk-adm-bg: #F1F5F9;          /* 관리자 배경 */
   --ydk-adm-card: #FFFFFF;
@@ -67,7 +68,7 @@ body.ydk-admin-body {
 
 .ydk-admin-logo-badge {
   background-color: var(--ydk-adm-primary);
-  color: #FFFFFF;
+  color: var(--ydk-adm-on-primary);
   font-size: 13px;
   font-weight: 800;
   padding: 3px 8px;
@@ -221,7 +222,7 @@ body.ydk-admin-body {
 .ydk-status-tab.active {
   background-color: var(--ydk-adm-primary);
   border-color: var(--ydk-adm-primary);
-  color: #FFFFFF;
+  color: var(--ydk-adm-on-primary);
 }
 
 /* 관리자 테이블 스타일 */
