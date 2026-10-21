@@ -1,6 +1,6 @@
 <?php
 /**
- * 용달코리아 v2-1 메인 페이지 (v2 대비 단순화 구조 비교용, PHP 7.4.33)
+ * 용달코리아 v2-1 메인 페이지 (v2 대비 단순화 구조 비교용, PHP 7.4.33, Deep Navy 테마)
  */
 require_once __DIR__ . '/includes/config.php';
 require_once __DIR__ . '/includes/functions.php';
