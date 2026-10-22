@@ -23,5 +23,9 @@ define('BIZ_ADDRESS', '서울 성동구 마장로42길 14 (마장동, 세림상�
 define('BIZ_EMAIL', 'kch1414@ydkorea.co.kr');
 define('BIZ_BANK', '기업은행 : 281-042527-04-011 (예금주 : 용달코리아 / 민경철)');
 
+// 알림 메일 발송 설정 (기존 main/formmail_01.php, formmail_1.php 연동)
+define('ADMIN_NOTIFY_EMAIL', 'kch1412@naver.com'); // 상담 및 회원가입 알림을 수신할 관리자 이메일
+define('MAIL_FROM_EMAIL', 'kch1414@ydkorea.co.kr');  // 시스템 발신용 이메일
+
 // 법적 고지 (중개자 면책 고지 문구)
 define('LEGAL_DISCLAIMER', '용달코리아는 통신판매 주선업(중개자)이므로 화물 운송 중에 발생하는 사고는 운송 당사자와 화주의 책임이므로 그 책임에 대해서는 민, 형사상의 책임을 지지 않습니다.');

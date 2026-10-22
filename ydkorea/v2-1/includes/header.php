@@ -23,14 +23,14 @@ $metaDesc = isset($pageDescription) && $pageDescription !== ''
   <meta name="description" content="<?= $metaDesc ?>">
   <meta name="keywords" content="용달코리아, 용달, 개인용달, 용달차, 개별용달, 전국화물, 리프트용달, 1톤트럭, 2.5톤, 5톤화물, 용달이사, 원룸이사, 지방화물, 화물운임">
   <meta name="robots" content="noindex, nofollow">
-  <link rel="canonical" href="https://www.ydkorea.co.kr/v2/">
+  <link rel="canonical" href="https://www.ydkorea.co.kr/v2-1/">
 
   <!-- Fomantic-UI 2.9.4 CSS -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fomantic-ui@2.9.4/dist/semantic.min.css">
   <!-- Pretendard Font -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
-  <!-- Custom CSS (Fomantic 뒤에 로드) -->
-  <link rel="stylesheet" href="<?= url('assets/css/custom.css') ?>">
+  <!-- Custom CSS (Fomantic 뒤에 로드, 캐시 갱신용 버전 파라미터 포함) -->
+  <link rel="stylesheet" href="<?= url('assets/css/custom.css?v=' . filemtime(__DIR__ . '/../assets/css/custom.css')) ?>">
 </head>
 <body>
 
@@ -42,7 +42,7 @@ $metaDesc = isset($pageDescription) && $pageDescription !== ''
       </div>
       <div>
         <a href="#" id="btnBookmark"><i class="star outline icon"></i> 즐겨찾기 추가</a>
-        <a href="/v2/admin/index.php"><i class="cog icon"></i> 관리자</a>
+        <a href="/v2-1/admin/index.php"><i class="cog icon"></i> 관리자</a>
       </div>
     </div>
   </div>
@@ -68,13 +68,13 @@ $metaDesc = isset($pageDescription) && $pageDescription !== ''
     <nav class="ydk-nav-wrap">
       <div class="ydk-container">
         <div class="ui menu ydk-nav">
-          <a class="item" href="<?= url('contents/info/compnay.php') ?>">회사 소개</a>
+          <a class="item" href="<?= url('contents/info/company.php') ?>">회사 소개</a>
           <a class="item" href="<?= url('contents/online/contact_us.php') ?>">온라인 상담</a>
-          <a class="item" href="<?= legacy('main/tel_con.html') ?>">전화 상담 방법</a>
-          <a class="item" href="<?= legacy('main/trt.html') ?>">운송 요금</a>
-          <a class="item" href="<?= legacy('main/car_size.html') ?>">차량 규격</a>
-          <a class="item" href="<?= legacy('main/car_club.html') ?>">차주 회원 모집</a>
-          <a class="item" href="<?= legacy('main/service.html') ?>">서비스 안내</a>
+          <a class="item" href="<?= url('contents/tel/tel.php') ?>">전화 상담 방법</a>
+          <a class="item" href="<?= url('contents/trt/trt.php') ?>">운송 요금</a>
+          <a class="item" href="<?= url('contents/size/car_size.php') ?>">차량 규격</a>
+          <a class="item" href="<?= url('contents/club/car_club.php') ?>">차주 회원 모집</a>
+          <a class="item" href="<?= url('contents/service/service.php') ?>">서비스 안내</a>
         </div>
       </div>
     </nav>

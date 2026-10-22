@@ -51,9 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } elseif ($privacy !== 'Y') {
             $errorMessage = '개인정보 수집 및 이용 안내에 동의해 주셔야 접수가 가능합니다.';
         } else {
-            // DB 또는 Mock 데이터 저장
-            require_once __DIR__ . '/../../admin/includes/db.php';
-            insert_consult_item([
+            $consultData = [
                 'name' => $name,
                 'tel' => $tel,
                 'email' => $email,
@@ -63,7 +61,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'end_area' => $endArea,
                 'story' => $story,
                 'client_ip' => $_SERVER['REMOTE_ADDR'] ?? ''
-            ]);
+            ];
+
+            // 1. DB 또는 Mock 데이터 저장
+            require_once __DIR__ . '/../../admin/includes/db.php';
+            insert_consult_item($consultData);
+
+            // 2. 관리자 알림 이메일 발송 (main/formmail_01.php 연동)
+            send_consult_mail($consultData);
 
             $isSuccess = true;
             // 새 CSRF 토큰 발급 (중복 전송 방지)
@@ -233,7 +238,7 @@ include __DIR__ . '/../../includes/header.php';
       <a href="tel:<?= SITE_PHONE_TEL ?>" class="ui huge button ydk-btn-call">
         <i class="phone icon"></i> 전화 상담 (<?= SITE_PHONE ?>)
       </a>
-      <a href="<?= url('contents/info/compnay.php') ?>" class="ui huge inverted button">
+      <a href="<?= url('contents/info/company.php') ?>" class="ui huge inverted button">
         <i class="building outline icon"></i> 회사 소개 보기
       </a>
     </div>

@@ -51,6 +51,11 @@ if ($c_conn) {
     </div>
   </footer>
 
+  <!-- 상단으로 가기 (Scroll to Top) 플로팅 버튼 -->
+  <button type="button" id="btnScrollTop" class="ydk-scroll-top" aria-label="페이지 맨 위로 이동" title="맨 위로 이동">
+    <i class="chevron up icon"></i>
+  </button>
+
   <!-- jQuery 3.7.1 CDN -->
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   <!-- Fomantic-UI 2.9.4 JS CDN -->
