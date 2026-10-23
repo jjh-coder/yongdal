@@ -698,6 +698,9 @@ body {
 /* ========================================================
    모바일 전용 하단 고정 전화 상담 바 (767px 이하)
    ======================================================== */
+/* ========================================================
+   모바일 전용 하단 고정 플로팅 바 (듀얼 액션: 견적 + 전화)
+   ======================================================== */
 .ydk-mobile-callbar {
   display: none;
   position: fixed;
@@ -705,33 +708,371 @@ body {
   left: 0;
   right: 0;
   z-index: 2000;
-  background-color: var(--ydk-cta);
-  box-shadow: 0 -3px 12px rgba(0, 0, 0, 0.25);
-  padding: 8px 16px;
+  background-color: rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.3);
+  padding: 8px 12px;
 }
 
+/* 듀얼 버튼 레이아웃 */
+.ydk-callbar-dual {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* 듀얼 1: 온라인 견적 / 보조 액션 버튼 */
+.ydk-callbar-btn-sub {
+  flex: 0 0 36%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background-color: var(--ydk-primary);
+  color: #FFFFFF !important;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 700;
+  height: 48px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: background-color 0.15s ease;
+  white-space: nowrap;
+}
+
+.ydk-callbar-btn-sub:hover,
+.ydk-callbar-btn-sub:active {
+  background-color: var(--ydk-primary-dark);
+}
+
+.ydk-callbar-btn-sub i.icon {
+  font-size: 16px;
+  margin: 0;
+}
+
+/* 듀얼 2: 전화 상담 / 메인 CTA 버튼 */
+.ydk-callbar-btn-main {
+  flex: 1 1 64%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background-color: var(--ydk-cta);
+  color: #FFFFFF !important;
+  text-decoration: none;
+  height: 48px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(194, 65, 12, 0.4);
+  transition: background-color 0.15s ease, transform 0.1s ease;
+}
+
+.ydk-callbar-btn-main:hover,
+.ydk-callbar-btn-main:active {
+  background-color: var(--ydk-cta-hover);
+}
+
+.ydk-callbar-btn-main i.icon {
+  font-size: 18px;
+  margin: 0;
+}
+
+.ydk-callbar-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+  text-align: left;
+}
+
+.ydk-callbar-text small {
+  font-size: 11px;
+  font-weight: 600;
+  opacity: 0.9;
+}
+
+.ydk-callbar-text strong {
+  font-size: 18px;
+  font-weight: 900;
+  letter-spacing: 0.5px;
+}
+
+/* 기존 단일 버튼 레거시 호환 */
 .ydk-mobile-callbar-btn {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 10px;
-  background-color: #FFFFFF;
-  color: var(--ydk-cta);
+  background-color: var(--ydk-cta);
+  color: #FFFFFF;
   text-decoration: none;
-  font-size: 18px;
+  font-size: 17px;
   font-weight: 800;
   padding: 12px 20px;
   border-radius: 8px;
   min-height: 48px;
+  width: 100%;
 }
 
 .ydk-mobile-callbar-btn i.icon {
-  font-size: 20px;
+  font-size: 18px;
 }
 
 .ydk-mobile-callbar-num {
-  font-size: 22px;
-  color: var(--ydk-cta);
+  font-size: 20px;
+  font-weight: 900;
+  color: #FFFFFF;
+}
+
+/* ========================================================
+   모바일 햄버거 토글 버튼 & 오프캔버스 드로어 메뉴
+   ======================================================== */
+.ydk-btn-menu-toggle {
+  display: none; /* 데스크톱 기본 숨김 */
+  background: transparent;
+  border: 1px solid var(--ydk-border-light);
+  border-radius: 8px;
+  color: var(--ydk-primary);
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.ydk-btn-menu-toggle i.icon {
+  font-size: 20px;
+  margin: 0;
+}
+
+.ydk-btn-menu-toggle:hover,
+.ydk-btn-menu-toggle:active {
+  background-color: #F1F5F9;
+  border-color: var(--ydk-primary);
+}
+
+/* 오프캔버스 배경 오버레이 */
+.ydk-drawer-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  z-index: 2500;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.ydk-drawer-overlay.is-open {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* 오프캔버스 드로어 본체 */
+.ydk-mobile-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 85%;
+  max-width: 380px;
+  background-color: #FFFFFF;
+  z-index: 2600;
+  box-shadow: -4px 0 24px rgba(0, 0, 0, 0.2);
+  transform: translateX(100%);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+}
+
+.ydk-mobile-drawer.is-open {
+  transform: translateX(0);
+}
+
+/* 드로어 열림 시 body 스크롤 방지 */
+body.ydk-drawer-locked {
+  overflow: hidden !important;
+}
+
+/* 드로어 상단 헤더 */
+.ydk-drawer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  background-color: #F8FAFC;
+  border-bottom: 1px solid var(--ydk-border-light);
+}
+
+.ydk-drawer-close {
+  background: transparent;
+  border: none;
+  font-size: 20px;
+  color: var(--ydk-muted);
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: 6px;
+}
+
+.ydk-drawer-close:hover {
+  background-color: #E2E8F0;
+  color: #1E293B;
+}
+
+/* 드로어 스크롤 바디 */
+.ydk-drawer-body {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 20px;
+}
+
+/* 빠른 상담 액션 카드 */
+.ydk-drawer-action-card {
+  background: linear-gradient(135deg, #1E3A8A 0%, #1B365D 100%);
+  border-radius: 10px;
+  padding: 18px 16px;
+  color: #FFFFFF;
+  margin-bottom: 22px;
+  box-shadow: 0 4px 12px rgba(27, 54, 93, 0.25);
+}
+
+.ydk-drawer-action-label {
+  font-size: 13px;
+  font-weight: 600;
+  opacity: 0.9;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.ydk-drawer-call-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background-color: var(--ydk-cta);
+  color: #FFFFFF !important;
+  font-size: 17px;
+  font-weight: 800;
+  padding: 12px;
+  border-radius: 8px;
+  text-decoration: none;
+  box-shadow: 0 2px 6px rgba(194, 65, 12, 0.4);
+  margin-bottom: 8px;
+}
+
+.ydk-drawer-quote-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background-color: rgba(255, 255, 255, 0.15);
+  color: #FFFFFF !important;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 9px;
+  border-radius: 8px;
+  text-decoration: none;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.ydk-drawer-section-title {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--ydk-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 10px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid #E2E8F0;
+}
+
+/* 드로어 내비게이션 리스트 */
+.ydk-drawer-nav {
+  list-style: none;
+  margin: 0 0 20px 0;
+  padding: 0;
+}
+
+.ydk-drawer-nav li {
+  margin-bottom: 4px;
+}
+
+.ydk-drawer-nav a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 14px;
+  font-size: 16px;
+  font-weight: 700;
+  color: #1E293B;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: all 0.15s ease;
+  min-height: 46px;
+}
+
+.ydk-drawer-nav a i.icon {
+  font-size: 18px;
+  color: var(--ydk-primary);
+  width: 20px;
+  text-align: center;
+}
+
+.ydk-drawer-nav a:hover,
+.ydk-drawer-nav a:active {
+  background-color: #EFF6FF;
+  color: var(--ydk-primary);
+}
+
+/* 드로어 서브링크 칩 */
+.ydk-drawer-sublinks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 24px;
+}
+
+.ydk-drawer-sublinks a {
+  display: inline-block;
+  background-color: #F1F5F9;
+  color: #334155;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 7px 12px;
+  border-radius: 20px;
+  text-decoration: none;
+  border: 1px solid #E2E8F0;
+  transition: all 0.15s ease;
+}
+
+.ydk-drawer-sublinks a:hover {
+  background-color: var(--ydk-primary);
+  color: #FFFFFF;
+}
+
+.ydk-drawer-footer {
+  background-color: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+  padding: 14px;
+  text-align: center;
+  font-size: 12px;
+  color: var(--ydk-muted);
+  line-height: 1.5;
 }
 
 /* ========================================================
@@ -764,6 +1105,12 @@ body {
 
   .ydk-header-main {
     padding: 10px 16px;
+    gap: 8px;
+  }
+
+  .ydk-btn-menu-toggle {
+    display: inline-flex;
+    margin-left: 6px;
   }
 
   .ydk-logo img,
@@ -773,13 +1120,13 @@ body {
 
   .ui.button.ydk-btn-call {
     font-size: 15px;
-    padding: 8px 14px;
+    padding: 8px 12px;
     min-height: 40px;
     gap: 6px;
   }
 
   .ydk-call-number {
-    font-size: 17px;
+    font-size: 16px;
   }
 
   .ydk-call-label {
@@ -793,7 +1140,11 @@ body {
 
   .ydk-main {
     padding-top: 16px;
-    padding-bottom: 24px;
+    padding-bottom: 60px; /* 플로팅 바 가림 방지 */
+  }
+
+  .ydk-footer {
+    padding-bottom: 80px; /* 플로팅 바 하단 가림 방지 */
   }
 
   .ydk-hero {

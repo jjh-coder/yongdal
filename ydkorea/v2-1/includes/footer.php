@@ -51,6 +51,29 @@ if ($c_conn) {
     </div>
   </footer>
 
+  <!-- 모바일 전용 하단 듀얼 플로팅 바 (온라인 간편견적 + 대표전화 상담) -->
+  <?php if (empty($hideMobileCallbar)): ?>
+    <aside class="ydk-mobile-callbar" aria-label="모바일 빠른 상담 바">
+      <?php if (!empty($customCallbarHtml)): ?>
+        <?= $customCallbarHtml ?>
+      <?php else: ?>
+        <div class="ydk-callbar-dual">
+          <a href="<?= url('contents/online/contact_us.php') ?>" class="ydk-callbar-btn-sub" title="온라인 간편 견적 신청">
+            <i class="edit outline icon"></i>
+            <span>온라인 견적</span>
+          </a>
+          <a href="tel:<?= SITE_PHONE_TEL ?>" class="ydk-callbar-btn-main" title="대표 전화 상담 바로 연결">
+            <i class="phone icon"></i>
+            <span class="ydk-callbar-text">
+              <small>전화 상담·예약</small>
+              <strong><?= SITE_PHONE ?></strong>
+            </span>
+          </a>
+        </div>
+      <?php endif; ?>
+    </aside>
+  <?php endif; ?>
+
   <!-- 상단으로 가기 (Scroll to Top) 플로팅 버튼 -->
   <button type="button" id="btnScrollTop" class="ydk-scroll-top" aria-label="페이지 맨 위로 이동" title="맨 위로 이동">
     <i class="chevron up icon"></i>

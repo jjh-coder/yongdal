@@ -61,6 +61,10 @@ $metaDesc = isset($pageDescription) && $pageDescription !== ''
           <span class="ydk-call-label">상담·예약</span>
           <span class="ydk-call-number"><?= SITE_PHONE ?></span>
         </a>
+        <!-- 모바일 전용 햄버거 메뉴 토글 버튼 -->
+        <button type="button" class="ydk-btn-menu-toggle" id="btnMobileMenu" aria-label="전체 메뉴 열기" title="전체 메뉴 열기">
+          <i class="bars icon"></i>
+        </button>
       </div>
     </div>
 
@@ -79,3 +83,93 @@ $metaDesc = isset($pageDescription) && $pageDescription !== ''
       </div>
     </nav>
   </header>
+
+  <!-- 모바일 오프캔버스 드로어 내비게이션 & 오버레이 -->
+  <div class="ydk-drawer-overlay" id="drawerOverlay" aria-hidden="true"></div>
+  <aside class="ydk-mobile-drawer" id="mobileDrawer" aria-label="모바일 전체 메뉴" role="dialog" aria-modal="true">
+    <div class="ydk-drawer-header">
+      <div class="ydk-drawer-title">
+        <a href="<?= url() ?>">
+          <img src="<?= url('assets/images/log/logo_02_simple.png') ?>" alt="<?= SITE_NAME ?>" style="height: 38px; width: auto; display: block;">
+        </a>
+      </div>
+      <button type="button" class="ydk-drawer-close" id="btnCloseDrawer" aria-label="메뉴 닫기">
+        <i class="times icon"></i>
+      </button>
+    </div>
+
+    <div class="ydk-drawer-body">
+      <!-- 1. 빠른 직통 상담 액션 카드 -->
+      <div class="ydk-drawer-action-card">
+        <div class="ydk-drawer-action-label">신속하고 친절한 전국 화물·이사 상담</div>
+        <a href="tel:<?= SITE_PHONE_TEL ?>" class="ydk-drawer-call-btn">
+          <i class="phone icon"></i> <?= SITE_PHONE ?> 즉시 통화
+        </a>
+        <a href="<?= url('contents/online/contact_us.php') ?>" class="ydk-drawer-quote-btn">
+          <i class="edit outline icon"></i> 1분 온라인 간편 견적 신청
+        </a>
+      </div>
+
+      <!-- 2. 7대 핵심 서비스 메뉴 -->
+      <div class="ydk-drawer-section-title">서비스 메뉴</div>
+      <ul class="ydk-drawer-nav">
+        <li>
+          <a href="<?= url('contents/info/company.php') ?>">
+            <i class="info circle icon"></i> 회사 소개
+          </a>
+        </li>
+        <li>
+          <a href="<?= url('contents/online/contact_us.php') ?>">
+            <i class="edit icon"></i> 온라인 상담 / 무료 견적
+          </a>
+        </li>
+        <li>
+          <a href="<?= url('contents/tel/tel.php') ?>">
+            <i class="phone volume icon"></i> 전화 상담 방법 안내
+          </a>
+        </li>
+        <li>
+          <a href="<?= url('contents/trt/trt.php') ?>">
+            <i class="calculator icon"></i> 차종별 운송 요금표
+          </a>
+        </li>
+        <li>
+          <a href="<?= url('contents/size/car_size.php') ?>">
+            <i class="truck icon"></i> 차량 적재함 규격
+          </a>
+        </li>
+        <li>
+          <a href="<?= url('contents/club/car_club.php') ?>">
+            <i class="user plus icon"></i> 차주 회원 모집 안내
+          </a>
+        </li>
+        <li>
+          <a href="<?= url('contents/service/service.php') ?>">
+            <i class="clipboard list icon"></i> 종합 서비스 안내
+          </a>
+        </li>
+      </ul>
+
+      <!-- 3. 지역별 차주 찾기 & 지점 바로가기 -->
+      <div class="ydk-drawer-section-title">지역 및 특화 차주 찾기</div>
+      <div class="ydk-drawer-sublinks">
+        <a href="<?= url('contents/company/company_list.php?id=07') ?>">best 용달</a>
+        <a href="<?= url('contents/company/company_list.php?id=08') ?>">1.4t~5t 화물</a>
+        <a href="<?= url('contents/company/company_list.php?id=09') ?>">탑차</a>
+        <a href="<?= url('contents/company/company_list.php?id=10') ?>">리프트차</a>
+        <a href="<?= url('contents/company/company_list.php?id=11') ?>">서울권 지점</a>
+        <a href="<?= url('contents/company/company_list.php?id=36') ?>">경기·인천권</a>
+        <a href="<?= url('contents/company/company_list.php?id=59') ?>">광역시·지방</a>
+        <a href="<?= url('contents/company/jijum/') ?>">전국 지점 상세안내</a>
+      </div>
+
+      <!-- 4. 하단 신뢰 안내 -->
+      <div class="ydk-drawer-footer">
+        <div style="font-weight: 800; color: var(--ydk-primary); margin-bottom: 4px;">용달코리아 전국 통합 배차센터</div>
+        <div>연중무휴 당일 신속 배차 직거래 연결</div>
+        <div style="margin-top: 6px; font-size: 11px; color: var(--ydk-muted);">
+          화물자동차운송주선사업 관허 제4-42호 등록업체
+        </div>
+      </div>
+    </div>
+  </aside>

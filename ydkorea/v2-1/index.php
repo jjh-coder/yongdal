@@ -391,15 +391,6 @@ $areaInfos = [
     <a href="tel:<?= SITE_PHONE_TEL ?>" class="ydk2-closing-phone"><i class="phone icon"></i> <?= SITE_PHONE ?></a>
   </section>
 
-  <!-- 모바일 전용 하단 고정 전화 바 (767px 이하) -->
-  <aside class="ydk-mobile-callbar" aria-label="모바일 즉시 전화상담">
-    <a href="tel:<?= SITE_PHONE_TEL ?>" class="ydk-mobile-callbar-btn">
-      <i class="phone icon"></i>
-      <span class="ydk-mobile-callbar-label">지금 바로 전화 상담</span>
-      <strong class="ydk-mobile-callbar-num"><?= SITE_PHONE ?></strong>
-    </a>
-  </aside>
-
 </main>
 
 <?php include __DIR__ . '/includes/footer.php'; ?>

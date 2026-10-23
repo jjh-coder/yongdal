@@ -22,6 +22,24 @@ if ($areaId === '') {
 $pageTitle = ($item ? $item['name'] . ' 지점 상세 안내' : '지점 안내') . ' | ' . SITE_NAME;
 $pageDescription = ($item ? $item['name'] . ' 직통 전화 ' . $item['tel'] . '. 원룸이사, 학생이사, 소형화물, 1톤 용달 안전 배차 직거래 연결.' : '용달코리아 전국 지점 상세 안내');
 
+// 지점 상세 전용 맞춤형 모바일 듀얼 플로팅 바 (본사 콜센터 + 지점 직통 전화)
+if ($item) {
+    $customCallbarHtml = '
+    <div class="ydk-callbar-dual">
+      <a href="tel:' . SITE_PHONE_TEL . '" class="ydk-callbar-btn-sub" title="본사 통합 콜센터 상담">
+        <i class="phone icon"></i>
+        <span>본사 ' . SITE_PHONE . '</span>
+      </a>
+      <a href="tel:' . e($item['tel_clean']) . '" class="ydk-callbar-btn-main" title="' . e($item['name']) . ' 직통 전화걸기">
+        <i class="phone volume icon"></i>
+        <span class="ydk-callbar-text">
+          <small>지점 직통 상담</small>
+          <strong>' . e($item['tel']) . '</strong>
+        </span>
+      </a>
+    </div>';
+}
+
 require_once __DIR__ . '/../../../includes/header.php';
 ?>
 

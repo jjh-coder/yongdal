@@ -56,3 +56,41 @@ $(document).ready(function () {
   }
 });
 
+// v2-1: 모바일 오프캔버스 드로어 메뉴 인터랙션
+$(document).ready(function () {
+  var $mobileDrawer = $('#mobileDrawer');
+  var $drawerOverlay = $('#drawerOverlay');
+  var $btnMobileMenu = $('#btnMobileMenu');
+  var $btnCloseDrawer = $('#btnCloseDrawer');
+
+  function openDrawer() {
+    $mobileDrawer.addClass('is-open');
+    $drawerOverlay.addClass('is-open');
+    $('body').addClass('ydk-drawer-locked');
+  }
+
+  function closeDrawer() {
+    $mobileDrawer.removeClass('is-open');
+    $drawerOverlay.removeClass('is-open');
+    $('body').removeClass('ydk-drawer-locked');
+  }
+
+  if ($btnMobileMenu.length) {
+    $btnMobileMenu.on('click', openDrawer);
+    $btnCloseDrawer.on('click', closeDrawer);
+    $drawerOverlay.on('click', closeDrawer);
+
+    // ESC 키 입력 시 닫기
+    $(document).on('keydown', function (e) {
+      if (e.key === 'Escape' && $mobileDrawer.hasClass('is-open')) {
+        closeDrawer();
+      }
+    });
+
+    // 드로어 내부 링크 클릭 시 드로어 닫힘
+    $mobileDrawer.find('a').on('click', function () {
+      closeDrawer();
+    });
+  }
+});
+
