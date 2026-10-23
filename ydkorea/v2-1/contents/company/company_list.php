@@ -100,23 +100,36 @@ $metaDescription = $currentInfo['name'] . ' 지역 화물·용달 전문 차주 
 
 /**
  * DB에서 가져온 레거시 상호명 및 지점 링크 정제 함수
+ * /jijum/{code}.html 레거시 링크를 v2-1 신규 반응형 지점 상세 페이지로 자동 변환
  */
-function clean_company_name(string $rawName, string $rawCode = ''): array
+function clean_company_name(string $rawName, string $rawCode = '', string $currentAreaId = '07'): array
 {
     // HTML 태그 제거하여 순수 상호명 추출
     $name = trim(strip_tags($rawName));
 
     // a href 속성에서 지점 링크 또는 code 추출
     $link = '';
+    $extractedCode = '';
     if (preg_match('/href=["\']?([^"\'>\s]+)["\']?/i', $rawName, $m)) {
         $link = $m[1];
-    } elseif (!empty($rawCode)) {
-        $link = '/jijum/' . $rawCode . '.html';
+        if (preg_match('#(?:^|/)jijum/([^/]+?)\.html#i', $link, $jm)) {
+            $extractedCode = $jm[1];
+        }
+    }
+
+    if (empty($extractedCode) && !empty($rawCode)) {
+        $extractedCode = $rawCode;
+    }
+
+    // 신규 v2-1 지점 상세 페이지 주소로 변환
+    if (!empty($extractedCode)) {
+        $link = url('contents/company/jijum/detail.php?code=' . urlencode($extractedCode) . '&id=' . urlencode($currentAreaId));
     }
 
     return [
         'name' => $name ?: '용달 전문점',
         'link' => $link,
+        'code' => $extractedCode,
     ];
 }
 
@@ -326,7 +339,7 @@ require_once __DIR__ . '/../../includes/header.php';
         $carType = $com['car'] ?? '1톤 카고';
 
         // HTML 태그 정제
-        $parsedName = clean_company_name($rawName, $rawCode);
+        $parsedName = clean_company_name($rawName, $rawCode, $id);
         $parsedTel  = clean_company_tel($rawTel);
         $cleanDetail = clean_company_detail($rawDetail);
       ?>
@@ -338,7 +351,13 @@ require_once __DIR__ . '/../../includes/header.php';
                 <span style="font-size: 12px; color: var(--ydk-muted);"><i class="check circle icon" style="color: #059669;"></i> 배차가능</span>
               </div>
               <h3 style="font-size: 19px; font-weight: 800; color: #1E293B; margin: 0 0 10px 0; line-height: 1.4;">
-                <?= e($parsedName['name']) ?>
+                <?php if (!empty($parsedName['link'])): ?>
+                  <a href="<?= e($parsedName['link']) ?>" style="color: inherit; text-decoration: none;" title="지점 상세 안내 보기">
+                    <?= e($parsedName['name']) ?>
+                  </a>
+                <?php else: ?>
+                  <?= e($parsedName['name']) ?>
+                <?php endif; ?>
               </h3>
               <p style="font-size: 14px; color: #475569; min-height: 42px; line-height: 1.5; margin-bottom: 16px;">
                 <?= e($cleanDetail) ?>
@@ -354,8 +373,8 @@ require_once __DIR__ . '/../../includes/header.php';
                   <i class="phone icon"></i> 바로 전화걸기
                 </a>
                 <?php if (!empty($parsedName['link'])): ?>
-                  <a href="<?= e($parsedName['link']) ?>" target="_blank" class="ui basic icon button" title="지점 상세 안내" style="padding: 10px 12px;">
-                    <i class="external alternate icon"></i>
+                  <a href="<?= e($parsedName['link']) ?>" class="ui basic icon button" title="지점 상세 안내 보기" style="padding: 10px 14px;">
+                    <i class="info circle icon"></i>
                   </a>
                 <?php endif; ?>
               </div>
