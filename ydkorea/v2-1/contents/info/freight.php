@@ -35,7 +35,7 @@ include __DIR__ . '/../../includes/header.php';
     <i class="shield alternate icon" style="color: #0284c7;"></i>
     <div class="content">
       <div class="header" style="font-size: 1.25rem; font-weight: 700; color: #0369a1; margin-bottom: 6px;">
-        믿을 수 있는 정식 "관허업체 [관허 4-42호]"를 선택하세요!
+        믿을 수 있는 정식 "관허업체 [관허 4042호]"를 선택하세요!
       </div>
       <p style="color: #334155; line-height: 1.6; margin: 0;">
         화물 운송 및 이사 예약 시 공인된 정식 관허업체를 이용하셔야 만일의 하자가 없으며, 

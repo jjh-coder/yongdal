@@ -105,7 +105,7 @@ include __DIR__ . '/../../includes/header.php';
       <div class="ui segment" style="border-radius: 12px; padding: 24px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); border-top: 4px solid #0284c7;">
         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 16px;">
           <h3 style="font-size: 1.2rem; color: #0369a1; margin: 0;">
-            <i class="truck icon"></i> 1톤 차량 기준 이사 요금 (서울 시내 기준 예시)
+            <i class="truck icon"></i> 1톤 차량 기준 이사 요금 (서울 시내 1층 기준 예시)
           </h3>
           <span style="font-size: 0.88rem; color: #64748b;">※ 거리 및 층수, 엘리베이터 유무에 따라 변동될 수 있습니다.</span>
         </div>
@@ -124,8 +124,8 @@ include __DIR__ . '/../../includes/header.php';
               <tr>
                 <td style="font-weight: 600; color: #334155;">단순 차량 운송만</td>
                 <td>기사 1명 (상하차 적재 도움)</td>
-                <td><strong style="color: #0284c7;">5 ~ 7 만원</strong></td>
                 <td><strong style="color: #0284c7;">6 ~ 8 만원</strong></td>
+                <td><strong style="color: #0284c7;">7 ~ 9 만원</strong></td>
               </tr>
               <tr>
                 <td rowspan="2" style="font-weight: 700; color: #1e293b; background: #fafafa;">일반이사</td>
@@ -141,14 +141,14 @@ include __DIR__ . '/../../includes/header.php';
               <tr>
                 <td style="font-weight: 700; color: #065f46; background: #fafafa;">반포장이사</td>
                 <td>전문 기사 1명 + 전문 인부 1명</td>
-                <td><strong>30 ~ 33 만원</strong></td>
-                <td><strong>33 ~ 38 만원</strong></td>
+                <td><strong>35 ~ 38 만원</strong></td>
+                <td><strong>38 ~ 40 만원</strong></td>
               </tr>
               <tr>
                 <td style="font-weight: 700; color: #b45309; background: #fafafa;">포장이사</td>
                 <td>전문 기사 1명 + 전문 인부 1명</td>
-                <td><strong>33 ~ 35 만원</strong></td>
                 <td><strong>35 ~ 40 만원</strong></td>
+                <td><strong>40 ~ 45 만원</strong></td>
               </tr>
             </tbody>
           </table>
@@ -161,7 +161,7 @@ include __DIR__ . '/../../includes/header.php';
       <div class="ui segment" style="border-radius: 12px; padding: 24px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); border-top: 4px solid #10b981;">
         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 16px;">
           <h3 style="font-size: 1.2rem; color: #065f46; margin: 0;">
-            <i class="truck icon"></i> 2.5톤 차량 기준 이사 요금 (투룸·가정·사무실)
+            <i class="truck icon"></i> 2.5톤 차량 기준 이사 요금. 서울 시내 1층 기준(투룸·가정·사무실)
           </h3>
           <span style="font-size: 0.88rem; color: #64748b;">※ 가구/가전 물량이 많은 가정 및 중소형 사무실 기준</span>
         </div>

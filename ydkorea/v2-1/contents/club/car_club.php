@@ -177,8 +177,18 @@ require_once __DIR__ . '/../../includes/header.php';
               <tr>
                 <td><strong>광역시 및 거점</strong></td>
                 <td>광역시 및 지방 핵심 거점</td>
-                <td style="text-align: right;"><strong style="color: #2563EB; font-size: 16px;">월 60,000원</strong></td>
+                <td style="text-align: right;"><strong style="color: #2563EB; font-size: 16px;">월 70,000원</strong></td>
               </tr>
+              <tr> 
+				<td><strong>서울시 및 수도권</strong></td>
+                <td>서울시 전구 및 수도권 일부</td>
+                <td style="text-align: right;"><strong style="color: #2563EB; font-size: 16px;">월 250,000원</strong></td>
+			  
+			  
+			  
+			  
+			  
+			  </tr>
             </tbody>
           </table>
 

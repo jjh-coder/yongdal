@@ -145,7 +145,7 @@ include __DIR__ . '/../../includes/header.php';
       <article class="ui segment" style="border-radius: 12px; padding: 24px; box-shadow: 0 4px 14px rgba(0,0,0,0.05); border: 1px solid var(--ydk-border-light); border-top: 4px solid #059669; margin-bottom: 24px;">
         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 14px;">
           <h3 style="font-size: 18px; font-weight: 800; color: #064E3B; margin: 0; display: flex; align-items: center; gap: 6px;">
-            <i class="table icon" style="color: #059669;"></i> 1톤 용달이사 표준 비용 가이드 (서울 시내 기준 예시)
+            <i class="table icon" style="color: #059669;"></i> 1톤 용달이사 표준 비용 가이드 (서울 시내 1층 기준 예시)
           </h3>
           <span class="ui green tiny label" style="font-weight: 700;">사전 정찰 기준</span>
         </div>
@@ -163,7 +163,7 @@ include __DIR__ . '/../../includes/header.php';
             </div>
             <div style="background: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 8px; padding: 12px; text-align: center; margin-bottom: 8px;">
               <div style="font-size: 12px; color: var(--ydk-muted); margin-bottom: 2px;">평일 / 손없는날 동일 기준</div>
-              <div style="font-size: 20px; font-weight: 900; color: #2563EB;">5 ~ 7 만원 <span style="font-size: 13px; font-weight: 600; color: #64748B;">(거리 비례)</span></div>
+              <div style="font-size: 20px; font-weight: 900; color: #2563EB;">6 ~ 9 만원 <span style="font-size: 13px; font-weight: 600; color: #64748B;">(거리 비례)</span></div>
             </div>
             <div style="font-size: 13px; color: #475569; line-height: 1.5;">
               <i class="check circle icon" style="color: #059669;"></i> 기사님 차량 운송 및 적재·하차 기본 지원 (짐은 1층 상차 대기)
@@ -204,11 +204,11 @@ include __DIR__ . '/../../includes/header.php';
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px;">
               <div style="background: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 8px; padding: 10px; text-align: center;">
                 <div style="font-size: 11px; color: var(--ydk-muted);">평일 요금</div>
-                <div style="font-size: 17px; font-weight: 900; color: #1E293B;">20 ~ 22 만원</div>
+                <div style="font-size: 17px; font-weight: 900; color: #1E293B;">20 ~ 25 만원</div>
               </div>
               <div style="background: #FFF7ED; border: 1px solid #FED7AA; border-radius: 8px; padding: 10px; text-align: center;">
                 <div style="font-size: 11px; color: #9A3412;">손없는날 / 주말</div>
-                <div style="font-size: 17px; font-weight: 900; color: #C2410C;">22 ~ 25 만원</div>
+                <div style="font-size: 17px; font-weight: 900; color: #C2410C;">24 ~ 28 만원</div>
               </div>
             </div>
             <div style="font-size: 13px; color: #475569; line-height: 1.5;">
@@ -227,11 +227,11 @@ include __DIR__ . '/../../includes/header.php';
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px;">
               <div style="background: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 8px; padding: 10px; text-align: center;">
                 <div style="font-size: 11px; color: var(--ydk-muted);">평일 요금</div>
-                <div style="font-size: 17px; font-weight: 900; color: #1E293B;">33 ~ 35 만원</div>
+                <div style="font-size: 17px; font-weight: 900; color: #1E293B;">35 ~ 40 만원</div>
               </div>
               <div style="background: #FFF7ED; border: 1px solid #FED7AA; border-radius: 8px; padding: 10px; text-align: center;">
                 <div style="font-size: 11px; color: #9A3412;">손없는날 / 주말</div>
-                <div style="font-size: 17px; font-weight: 900; color: #C2410C;">35 ~ 40 만원</div>
+                <div style="font-size: 17px; font-weight: 900; color: #C2410C;">40 ~ 45 만원</div>
               </div>
             </div>
             <div style="font-size: 13px; color: #475569; line-height: 1.5;">
@@ -258,7 +258,7 @@ include __DIR__ . '/../../includes/header.php';
                   <i class="truck icon" style="color: #2563EB;"></i> 용달차 단순 운송
                 </td>
                 <td colspan="2" style="font-size: 15px; font-weight: 800; color: #2563EB;">
-                  5 ~ 7 만원 <span style="font-size: 12px; font-weight: normal; color: var(--ydk-muted);">(거리 비례)</span>
+                  6 ~ 9 만원 <span style="font-size: 12px; font-weight: normal; color: var(--ydk-muted);">(거리 비례)</span>
                 </td>
                 <td style="text-align: left; padding-left: 14px;">기사 적재 및 하차 지원 (1층 대기 기준)</td>
               </tr>
@@ -271,16 +271,16 @@ include __DIR__ . '/../../includes/header.php';
                 <td style="text-align: left; padding-left: 14px;">기사 1명 + 고객 함께 작업 (실내 운반)</td>
               </tr>
               <tr>
-                <td style="font-weight: 800; color: #1E293B;">20 ~ 22 만원</td>
-                <td style="font-weight: 800; color: #C2410C;">22 ~ 25 만원</td>
+                <td style="font-weight: 800; color: #1E293B;">20 ~ 25 만원</td>
+                <td style="font-weight: 800; color: #C2410C;">24 ~ 28 만원</td>
                 <td style="text-align: left; padding-left: 14px;">기사 1명 + 전문 인부 1명 (고객 작업 없음)</td>
               </tr>
               <tr>
                 <td style="font-weight: 800; color: #9A3412; background: #FFF7ED;">
                   <i class="boxes icon" style="color: #D97706;"></i> 포장이사
                 </td>
-                <td style="font-weight: 800; color: #1E293B;">33 ~ 35 만원</td>
-                <td style="font-weight: 800; color: #C2410C;">35 ~ 40 만원</td>
+                <td style="font-weight: 800; color: #1E293B;">35 ~ 40 만원</td>
+                <td style="font-weight: 800; color: #C2410C;">40 ~ 45 만원</td>
                 <td style="text-align: left; padding-left: 14px;">기사 1명 + 전문 인부 1명 올인원 포장/정리</td>
               </tr>
             </tbody>

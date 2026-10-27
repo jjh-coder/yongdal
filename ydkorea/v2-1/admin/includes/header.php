@@ -52,6 +52,9 @@ $currentScript = basename($_SERVER['PHP_SELF']);
           <a href="<?= url('admin/qa_list.php') ?>" class="nav-item <?= in_array($currentScript, ['qa_list.php', 'qa_view.php']) ? 'active' : '' ?>">
             <i class="question circle outline icon"></i> 묻고답하기
           </a>
+          <a href="<?= url('admin/code_list.php') ?>" class="nav-item <?= in_array($currentScript, ['code_list.php']) ? 'active' : '' ?>">
+            <i class="tags icon"></i> 코드 관리
+          </a>
         </div>
       </div>
 

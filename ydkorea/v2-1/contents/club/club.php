@@ -110,7 +110,7 @@ require_once __DIR__ . '/../../includes/header.php';
       <i class="id card outline icon"></i> 차주회원 가입하기
     </h1>
     <p class="ydk-page-desc" style="color: #DC2626; font-weight: 600;">
-      ※ 유료회원 안내 : 한 지역당 월 / 3만원, 6만원, 5만원 (1톤 기준) 이니 필요한 차주분만 가입하세요.
+      ※ 유료회원 안내 : 서울시내 한 구당 월 / 3만 원, 서울 전구 25만 원 지역시 6만 원, 광역시 7만 원 (1톤 기준) 이니 필요한 차주분만 가입하세요.
     </p>
 
     <!-- 탭 네비게이션 (모집안내 / 회원가입) -->
@@ -134,7 +134,8 @@ require_once __DIR__ . '/../../includes/header.php';
         <div style="font-size: 14px; color: #475569; line-height: 1.6;">
           • 서울시 1개 구 가입 시 : <strong>월 30,000원</strong> &nbsp;|&nbsp;
           • 수도권 2개 지역 가입 시 : <strong>월 60,000원</strong> &nbsp;|&nbsp;
-          • 광역시/거점 : <strong>월 60,000원</strong>
+          • 광역시/거점 : <strong>월 70,000원</strong> &nbsp;|&nbsp;
+		  • 서울시 전구 수도권 일부 : <strong>월 250,000원</strong>
         </div>
         <div style="font-size: 14px; color: #1E293B; margin-top: 4px;">
           • <strong>은행 계좌 :</strong> 기업은행 <strong>010-8833-1412</strong> (예금주 : 민경철)

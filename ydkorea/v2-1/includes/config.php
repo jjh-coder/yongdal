@@ -15,7 +15,7 @@ define('SITE_NAME', '용달코리아');
 define('LEGACY_URL', '');
 
 // 사업자 및 법적 정보
-define('BIZ_NAME', '용달코리아 [관허4-42]');
+define('BIZ_NAME', '용달코리아 [관허4042]');
 define('BIZ_CEO', '민경철');
 define('BIZ_NO', '206-01-76008');
 define('BIZ_MAIL_ORDER', '제2009-서울성동-0009호');

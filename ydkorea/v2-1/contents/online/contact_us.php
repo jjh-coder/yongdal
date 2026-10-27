@@ -70,9 +70,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // 2. 관리자 알림 이메일 발송 (main/formmail_01.php 연동)
             send_consult_mail($consultData);
 
-            $isSuccess = true;
+            // 3. 완료 페이지 전달용 세션 데이터 생성
+            $_SESSION['consult_success'] = $consultData;
+            $_SESSION['consult_id'] = 'YDK-' . date('Ymd') . '-' . strtoupper(substr(md5(uniqid((string)mt_rand(), true)), 0, 4));
+            $_SESSION['consult_time'] = date('Y년 m월 d일 H시 i분');
+
             // 새 CSRF 토큰 발급 (중복 전송 방지)
             $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+
+            // 4. 완료 페이지로 이동 (PRG 패턴: 새로고침 시 중복 제출 방지)
+            header('Location: ' . url('contents/online/complete.php'));
+            exit;
         }
     }
 }

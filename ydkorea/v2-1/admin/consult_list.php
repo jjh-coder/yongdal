@@ -1,6 +1,7 @@
 <?php
 /**
- * 용달코리아 v2 관리자 온라인 상담 내역 전체 목록 (PHP 7.4.33)
+ * 용달코리아 v2-1 관리자 온라인 상담 내역 전체 목록 (PHP 7.4.33)
+ * 온라인 상담 단건 삭제 및 선택 일괄 삭제 기능 지원
  */
 $adminTitle = '온라인 상담 내역 목록';
 require_once __DIR__ . '/includes/header.php';
@@ -11,7 +12,62 @@ $keyword = trim($_GET['kw'] ?? '');
 $page = max(1, (int)($_GET['p'] ?? 1));
 $perPage = 15;
 
-// 데이터 조회
+$makePageUrl = function($p) use ($filterStatus, $keyword) {
+    $q = ['p' => $p];
+    if ($filterStatus !== '') $q['status'] = $filterStatus;
+    if ($keyword !== '') $q['kw'] = $keyword;
+    return url('admin/consult_list.php?' . http_build_query($q));
+};
+
+// 1. POST 삭제 요청 처리
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $action = $_POST['action'] ?? '';
+
+    // 단건 삭제
+    if ($action === 'delete') {
+        $delId = (int)($_POST['id'] ?? 0);
+        if ($delId > 0 && delete_consult_item($delId)) {
+            $_SESSION['admin_flash'] = [
+                'type' => 'positive',
+                'message' => "상담 내역(#{$delId})이 성공적으로 삭제되었습니다."
+            ];
+        } else {
+            $_SESSION['admin_flash'] = [
+                'type' => 'negative',
+                'message' => "상담 내역 삭제 처리에 실패했습니다."
+            ];
+        }
+        header('Location: ' . $makePageUrl($page));
+        exit;
+    }
+
+    // 선택 일괄 삭제
+    if ($action === 'batch_delete') {
+        $ids = $_POST['ids'] ?? [];
+        if (is_array($ids) && count($ids) > 0) {
+            $deletedCount = delete_consult_items($ids);
+            $_SESSION['admin_flash'] = [
+                'type' => 'positive',
+                'message' => "선택하신 상담 내역 총 {$deletedCount}건이 성공적으로 삭제되었습니다."
+            ];
+        } else {
+            $_SESSION['admin_flash'] = [
+                'type' => 'negative',
+                'message' => "삭제할 상담 내역을 1개 이상 선택해 주세요."
+            ];
+        }
+        header('Location: ' . $makePageUrl($page));
+        exit;
+    }
+}
+
+// 세션 플래시 메시지 확인
+$flash = $_SESSION['admin_flash'] ?? null;
+if (isset($_SESSION['admin_flash'])) {
+    unset($_SESSION['admin_flash']);
+}
+
+// 2. 데이터 조회
 $allList = get_consult_list($filterStatus, $keyword);
 $totalRows = count($allList);
 $totalPages = max(1, (int)ceil($totalRows / $perPage));
@@ -23,13 +79,6 @@ $pagedList = array_slice($allList, $offset, $perPage);
 $pageBlock = 10;
 $startPage = (int)(floor(($page - 1) / $pageBlock) * $pageBlock) + 1;
 $endPage = min($totalPages, $startPage + $pageBlock - 1);
-
-$makePageUrl = function($p) use ($filterStatus, $keyword) {
-    $q = ['p' => $p];
-    if ($filterStatus !== '') $q['status'] = $filterStatus;
-    if ($keyword !== '') $q['kw'] = $keyword;
-    return url('admin/consult_list.php?' . http_build_query($q));
-};
 
 // 상태별 카운트 계산용 전체 조회
 $statsList = get_consult_list('', $keyword);
@@ -54,13 +103,27 @@ $carTypes = [
 ?>
 
 <div class="ydk-admin-card">
-  <div class="ydk-admin-card-header">
-    <h1 class="ydk-admin-card-title">
+  <!-- 상단 알림 메시지 -->
+  <?php if (!empty($flash)): ?>
+    <div class="ui <?= e($flash['type'] ?? 'info') ?> message" style="margin-bottom: 20px;">
+      <i class="<?= ($flash['type'] === 'positive') ? 'check' : 'exclamation triangle' ?> icon"></i>
+      <?= e($flash['message']) ?>
+    </div>
+  <?php endif; ?>
+
+  <div class="ydk-admin-card-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+    <h1 class="ydk-admin-card-title" style="margin: 0;">
       <i class="comments outline icon"></i> 온라인 상담 및 견적 신청 내역
       <span style="font-size: 15px; font-weight: 500; color: var(--ydk-adm-muted); margin-left: 8px;">
         (총 <?= number_format($totalRows) ?>건)
       </span>
     </h1>
+
+    <div style="display: flex; gap: 8px; align-items: center;">
+      <button type="button" class="ui negative small button" id="btnBatchDelete" onclick="deleteBatch()" style="font-weight: 700;">
+        <i class="trash alternate icon"></i> 선택 항목 삭제
+      </button>
+    </div>
   </div>
 
   <!-- 필터 탭 & 검색창 -->
@@ -71,7 +134,7 @@ $carTypes = [
          class="ydk-status-tab <?= ($filterStatus === '') ? 'active' : '' ?>">
         전체 (<?= $statCounts['전체'] ?>)
       </a>
-      <a href="<?= url('admin/consult_list.php?status=접수&kw=' . urlencode($keyword)) ?>" 
+      <a href="<?= url('admin/consult_list.php?status=' . urlencode('접수') . '&kw=' . urlencode($keyword)) ?>" 
          class="ydk-status-tab <?= ($filterStatus === '접수') ? 'active' : '' ?>">
         신규 접수 (<?= $statCounts['접수'] ?>)
       </a>
@@ -114,10 +177,18 @@ $carTypes = [
       </div>
     </div>
   <?php else: ?>
+    <!-- 일괄 선택 폼 (테이블 내부 체크박스와 연동) -->
+    <form id="batchDeleteForm" method="post" action="<?= $makePageUrl($page) ?>">
+      <input type="hidden" name="action" value="batch_delete">
+    </form>
+
     <div style="overflow-x: auto;">
       <table class="ui celled table unstackable selectable ydk-adm-table">
         <thead>
           <tr>
+            <th style="width: 44px; text-align: center;">
+              <input type="checkbox" id="checkAll" title="전체 선택/해제" style="cursor: pointer; width: 16px; height: 16px;">
+            </th>
             <th style="width: 65px; text-align: center;">번호</th>
             <th style="width: 95px; text-align: center;">상태</th>
             <th style="width: 120px;">신청자명</th>
@@ -125,8 +196,8 @@ $carTypes = [
             <th style="width: 110px;">희망차종</th>
             <th>출발지 → 도착지</th>
             <th style="width: 110px; text-align: center;">운송희망일</th>
-            <th style="width: 140px; text-align: center;">신청일시</th>
-            <th style="width: 80px; text-align: center;">상세</th>
+            <th style="width: 130px; text-align: center;">신청일시</th>
+            <th style="width: 120px; text-align: center;">관리</th>
           </tr>
         </thead>
         <tbody>
@@ -135,6 +206,9 @@ $carTypes = [
             $carName = $carTypes[$row['car_type']] ?? ($row['car_type'] ?: '상담후결정');
           ?>
             <tr>
+              <td style="text-align: center;">
+                <input type="checkbox" name="ids[]" value="<?= (int)$row['id'] ?>" class="consult-chk" form="batchDeleteForm" style="cursor: pointer; width: 16px; height: 16px;">
+              </td>
               <td style="text-align: center; color: var(--ydk-adm-muted);"><?= (int)$row['id'] ?></td>
               <td style="text-align: center;">
                 <span class="ydk-badge-status <?= e($st) ?>"><?= e($st) ?></span>
@@ -156,9 +230,14 @@ $carTypes = [
                 <?= e(date('y/m/d H:i', strtotime($row['created_at']))) ?>
               </td>
               <td style="text-align: center;">
-                <a href="<?= url('admin/consult_view.php?id=' . (int)$row['id']) ?>" class="ui mini primary button">
-                  보기
-                </a>
+                <div class="ui mini buttons">
+                  <a href="<?= url('admin/consult_view.php?id=' . (int)$row['id']) ?>" class="ui button primary" style="padding: 6px 10px;">
+                    보기
+                  </a>
+                  <button type="button" class="ui button negative basic" style="padding: 6px 10px;" onclick="deleteSingle(<?= (int)$row['id'] ?>, '<?= e(addslashes($row['name'])) ?>')">
+                    삭제
+                  </button>
+                </div>
               </td>
             </tr>
           <?php endforeach; ?>
@@ -220,6 +299,50 @@ $carTypes = [
 
 </div>
 
+<!-- 단건 삭제 전송용 숨김 폼 -->
+<form id="singleDeleteForm" method="post" action="<?= $makePageUrl($page) ?>" style="display: none;">
+  <input type="hidden" name="action" value="delete">
+  <input type="hidden" name="id" id="singleDeleteId" value="">
+</form>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var checkAll = document.getElementById('checkAll');
+  var rowChecks = document.querySelectorAll('.consult-chk');
+
+  if (checkAll) {
+    checkAll.addEventListener('change', function () {
+      var isChecked = this.checked;
+      rowChecks.forEach(function (chk) {
+        chk.checked = isChecked;
+      });
+    });
+  }
+});
+
+// 단건 삭제 확인
+function deleteSingle(id, name) {
+  var msg = '[' + name + ' 고객님]의 상담 내역 #' + id + '번을 정말로 삭제하시겠습니까?\n삭제 후에는 복구할 수 없습니다.';
+  if (confirm(msg)) {
+    document.getElementById('singleDeleteId').value = id;
+    document.getElementById('singleDeleteForm').submit();
+  }
+}
+
+// 선택 일괄 삭제 확인
+function deleteBatch() {
+  var checkedBoxes = document.querySelectorAll('.consult-chk:checked');
+  if (checkedBoxes.length === 0) {
+    alert('삭제할 상담 내역을 1개 이상 선택해 주세요.');
+    return;
+  }
+
+  var msg = '선택하신 총 ' + checkedBoxes.length + '건의 상담 내역을 정말로 일괄 삭제하시겠습니까?\n삭제 후에는 복구할 수 없습니다.';
+  if (confirm(msg)) {
+    document.getElementById('batchDeleteForm').submit();
+  }
+}
+</script>
+
 <?php
 require_once __DIR__ . '/includes/footer.php';
-?>

@@ -5,6 +5,33 @@
 $adminTitle = '대시보드';
 require_once __DIR__ . '/includes/header.php';
 
+// POST 요청 (단건 상담 삭제 처리)
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $action = $_POST['action'] ?? '';
+    if ($action === 'delete_consult') {
+        $delId = (int)($_POST['id'] ?? 0);
+        if ($delId > 0 && delete_consult_item($delId)) {
+            $_SESSION['admin_flash'] = [
+                'type' => 'positive',
+                'message' => "온라인 상담 내역(#{$delId})이 성공적으로 삭제되었습니다."
+            ];
+        } else {
+            $_SESSION['admin_flash'] = [
+                'type' => 'negative',
+                'message' => "상담 내역 삭제 처리에 실패했습니다."
+            ];
+        }
+        header('Location: ' . url('admin/index.php'));
+        exit;
+    }
+}
+
+// 세션 플래시 메시지 확인
+$flash = $_SESSION['admin_flash'] ?? null;
+if (isset($_SESSION['admin_flash'])) {
+    unset($_SESSION['admin_flash']);
+}
+
 // 전체 상담 데이터 조회
 $allConsults = get_consult_list();
 $totalConsultCount = count($allConsults);
@@ -50,6 +77,14 @@ foreach ($allQas as $q) {
 }
 ?>
 
+<!-- 상단 알림 메시지 -->
+<?php if (!empty($flash)): ?>
+  <div class="ui <?= e($flash['type'] ?? 'info') ?> message" style="margin-bottom: 20px;">
+    <i class="<?= ($flash['type'] === 'positive') ? 'check' : 'exclamation triangle' ?> icon"></i>
+    <?= e($flash['message']) ?>
+  </div>
+<?php endif; ?>
+
 <!-- 상단 관리자 바로가기 헤더 -->
 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
   <div style="font-size: 14px; color: var(--ydk-adm-muted); display: flex; gap: 14px; flex-wrap: wrap;">
@@ -58,6 +93,9 @@ foreach ($allQas as $q) {
     <span>묻고답하기: <strong style="color: #D97706;"><?= number_format($totalQaCount) ?></strong>건 (답변대기 <?= $countPendingQa ?>건)</span>
   </div>
   <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+    <a href="<?= url('admin/code_list.php') ?>" class="ui small button" style="background: #4B5563; color: #FFF; font-weight: 700;">
+      <i class="tags icon"></i> 코드 관리
+    </a>
     <a href="<?= url('admin/notice_list.php') ?>" class="ui small basic button">
       <i class="bullhorn icon"></i> 공지사항 관리
     </a>
@@ -235,7 +273,7 @@ foreach ($allQas as $q) {
             <th>출발지 → 도착지</th>
             <th style="width: 110px; text-align: center;">운송희망일</th>
             <th style="width: 120px; text-align: center;">신청일시</th>
-            <th style="width: 75px; text-align: center;">관리</th>
+            <th style="width: 110px; text-align: center;">관리</th>
           </tr>
         </thead>
         <tbody>
@@ -279,9 +317,14 @@ foreach ($allQas as $q) {
                 <?= e(date('m/d H:i', strtotime($row['created_at']))) ?>
               </td>
               <td style="text-align: center;">
-                <a href="<?= url('admin/consult_view.php?id=' . (int)$row['id']) ?>" class="ui mini basic button">
-                  상세
-                </a>
+                <div class="ui mini buttons">
+                  <a href="<?= url('admin/consult_view.php?id=' . (int)$row['id']) ?>" class="ui mini basic button" style="padding: 5px 8px;">
+                    상세
+                  </a>
+                  <button type="button" class="ui mini negative basic button" style="padding: 5px 8px;" onclick="deleteConsultDashboard(<?= (int)$row['id'] ?>, '<?= e(addslashes($row['name'])) ?>')">
+                    삭제
+                  </button>
+                </div>
               </td>
             </tr>
           <?php endforeach; ?>
@@ -290,6 +333,22 @@ foreach ($allQas as $q) {
     </div>
   <?php endif; ?>
 </section>
+
+<!-- 대시보드 상담 단건 삭제 숨김 폼 -->
+<form id="dashConsultDeleteForm" method="post" action="<?= url('admin/index.php') ?>" style="display: none;">
+  <input type="hidden" name="action" value="delete_consult">
+  <input type="hidden" name="id" id="dashConsultDeleteId" value="">
+</form>
+
+<script>
+function deleteConsultDashboard(id, name) {
+  var msg = '[' + name + ' 고객님]의 상담 내역 #' + id + '번을 대시보드에서 삭제하시겠습니까?\n삭제 후에는 복구할 수 없습니다.';
+  if (confirm(msg)) {
+    document.getElementById('dashConsultDeleteId').value = id;
+    document.getElementById('dashConsultDeleteForm').submit();
+  }
+}
+</script>
 
 <?php
 require_once __DIR__ . '/includes/footer.php';

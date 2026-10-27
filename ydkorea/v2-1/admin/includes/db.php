@@ -298,6 +298,53 @@ function insert_consult_item(array $data): bool
 }
 
 /**
+ * 온라인 상담 내역 단건 삭제
+ */
+function delete_consult_item(int $id): bool
+{
+    if ($id <= 0) {
+        return false;
+    }
+
+    $pdo = get_db_connection();
+    if ($pdo) {
+        $stmt = $pdo->prepare("DELETE FROM ydk_online_consult WHERE id = :id");
+        return $stmt->execute([':id' => $id]);
+    }
+
+    $list = load_mock_consults();
+    $newList = [];
+    $found = false;
+    foreach ($list as $item) {
+        if ((int)($item['id'] ?? 0) === $id) {
+            $found = true;
+            continue;
+        }
+        $newList[] = $item;
+    }
+    if ($found) {
+        save_mock_consults($newList);
+        return true;
+    }
+    return false;
+}
+
+/**
+ * 온라인 상담 내역 다건(일괄) 삭제
+ */
+function delete_consult_items(array $ids): int
+{
+    $deletedCount = 0;
+    foreach ($ids as $id) {
+        $cleanId = (int)$id;
+        if ($cleanId > 0 && delete_consult_item($cleanId)) {
+            $deletedCount++;
+        }
+    }
+    return $deletedCount;
+}
+
+/**
  * Mock 차주회원 JSON 파일 경로
  */
 function get_mock_club_file_path(): string
@@ -1294,4 +1341,537 @@ function delete_qa_item(int $id): bool
     save_mock_qas(array_values($filtered));
     return true;
 }
+
+// ========================================================
+// 공통 코드 관리 (Code Management) CRUD 헬퍼 함수
+// ========================================================
+
+/**
+ * Mock 코드 관리 JSON 파일 경로
+ */
+function get_mock_code_file_path(): string
+{
+    $dir = __DIR__ . '/../data';
+    if (!is_dir($dir)) {
+        @mkdir($dir, 0755, true);
+    }
+    return $dir . '/code_mock.json';
+}
+
+/**
+ * Mock 코드 데이터 로드 (DB 연결 실패 시 fallback)
+ */
+function load_mock_codes(): array
+{
+    $filePath = get_mock_code_file_path();
+    if (file_exists($filePath)) {
+        $json = file_get_contents($filePath);
+        $data = json_decode($json, true);
+        if (is_array($data) && isset($data['groups'], $data['details'])) {
+            return $data;
+        }
+    }
+    return ['groups' => [], 'details' => []];
+}
+
+/**
+ * Mock 코드 데이터 저장
+ */
+function save_mock_codes(array $data): bool
+{
+    $filePath = get_mock_code_file_path();
+    $json = json_encode($data, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+    return file_put_contents($filePath, $json) !== false;
+}
+
+/**
+ * 코드 그룹(대분류) 전체 목록 조회
+ */
+function get_code_groups(): array
+{
+    $pdo = get_db_connection();
+    if ($pdo) {
+        try {
+            $sql = "SELECT g.*, 
+                           COUNT(d.id) AS detail_count 
+                    FROM code_group g 
+                    LEFT JOIN code_detail d ON g.group_code = d.group_code 
+                    GROUP BY g.group_code 
+                    ORDER BY g.sort_order ASC, g.group_code ASC";
+            $stmt = $pdo->query($sql);
+            if ($stmt) {
+                return $stmt->fetchAll();
+            }
+        } catch (\Throwable $e) {
+            // fallback
+        }
+    }
+
+    $mock = load_mock_codes();
+    $groups = $mock['groups'] ?? [];
+    $details = $mock['details'] ?? [];
+
+    // 그룹별 세부코드 개수 집계
+    foreach ($groups as &$g) {
+        $cnt = 0;
+        foreach ($details as $d) {
+            if (($d['group_code'] ?? '') === $g['group_code']) {
+                $cnt++;
+            }
+        }
+        $g['detail_count'] = $cnt;
+    }
+    unset($g);
+
+    usort($groups, function ($a, $b) {
+        if (($a['sort_order'] ?? 0) === ($b['sort_order'] ?? 0)) {
+            return strcmp($a['group_code'] ?? '', $b['group_code'] ?? '');
+        }
+        return ($a['sort_order'] ?? 0) <=> ($b['sort_order'] ?? 0);
+    });
+
+    return $groups;
+}
+
+/**
+ * 단일 코드 그룹 조회
+ */
+function get_code_group(string $groupCode): ?array
+{
+    if (empty($groupCode)) return null;
+
+    $pdo = get_db_connection();
+    if ($pdo) {
+        try {
+            $stmt = $pdo->prepare("SELECT * FROM code_group WHERE group_code = :group_code LIMIT 1");
+            $stmt->execute([':group_code' => $groupCode]);
+            $res = $stmt->fetch();
+            if ($res) return $res;
+        } catch (\Throwable $e) {
+            // fallback
+        }
+    }
+
+    $mock = load_mock_codes();
+    foreach ($mock['groups'] ?? [] as $g) {
+        if (($g['group_code'] ?? '') === $groupCode) {
+            return $g;
+        }
+    }
+    return null;
+}
+
+/**
+ * 신규 코드 그룹 등록
+ */
+function insert_code_group(array $data): bool
+{
+    $groupCode = strtoupper(trim($data['group_code'] ?? ''));
+    $groupName = trim($data['group_name'] ?? '');
+    if (empty($groupCode) || empty($groupName)) return false;
+
+    $desc = trim($data['description'] ?? '');
+    $isUse = ($data['is_use'] ?? 'Y') === 'N' ? 'N' : 'Y';
+    $sortOrder = (int)($data['sort_order'] ?? 0);
+
+    $pdo = get_db_connection();
+    if ($pdo) {
+        try {
+            $sql = "INSERT INTO code_group (group_code, group_name, description, is_use, sort_order, created_at, updated_at)
+                    VALUES (:group_code, :group_name, :description, :is_use, :sort_order, NOW(), NOW())";
+            $stmt = $pdo->prepare($sql);
+            return $stmt->execute([
+                ':group_code' => $groupCode,
+                ':group_name' => $groupName,
+                ':description' => $desc,
+                ':is_use' => $isUse,
+                ':sort_order' => $sortOrder
+            ]);
+        } catch (\Throwable $e) {
+            // fallback
+        }
+    }
+
+    $mock = load_mock_codes();
+    // 중복 체크
+    foreach ($mock['groups'] as $g) {
+        if ($g['group_code'] === $groupCode) {
+            return false;
+        }
+    }
+
+    $now = date('Y-m-d H:i:s');
+    $mock['groups'][] = [
+        'group_code' => $groupCode,
+        'group_name' => $groupName,
+        'description' => $desc,
+        'is_use' => $isUse,
+        'sort_order' => $sortOrder,
+        'created_at' => $now,
+        'updated_at' => $now
+    ];
+    return save_mock_codes($mock);
+}
+
+/**
+ * 코드 그룹 수정
+ */
+function update_code_group(string $groupCode, array $data): bool
+{
+    if (empty($groupCode)) return false;
+    $groupName = trim($data['group_name'] ?? '');
+    $desc = trim($data['description'] ?? '');
+    $isUse = ($data['is_use'] ?? 'Y') === 'N' ? 'N' : 'Y';
+    $sortOrder = (int)($data['sort_order'] ?? 0);
+
+    $pdo = get_db_connection();
+    if ($pdo) {
+        try {
+            $sql = "UPDATE code_group 
+                    SET group_name = :group_name, 
+                        description = :description, 
+                        is_use = :is_use, 
+                        sort_order = :sort_order,
+                        updated_at = NOW() 
+                    WHERE group_code = :group_code";
+            $stmt = $pdo->prepare($sql);
+            return $stmt->execute([
+                ':group_name' => $groupName,
+                ':description' => $desc,
+                ':is_use' => $isUse,
+                ':sort_order' => $sortOrder,
+                ':group_code' => $groupCode
+            ]);
+        } catch (\Throwable $e) {
+            // fallback
+        }
+    }
+
+    $mock = load_mock_codes();
+    $found = false;
+    foreach ($mock['groups'] as &$g) {
+        if ($g['group_code'] === $groupCode) {
+            $g['group_name'] = $groupName;
+            $g['description'] = $desc;
+            $g['is_use'] = $isUse;
+            $g['sort_order'] = $sortOrder;
+            $g['updated_at'] = date('Y-m-d H:i:s');
+            $found = true;
+            break;
+        }
+    }
+    if ($found) {
+        return save_mock_codes($mock);
+    }
+    return false;
+}
+
+/**
+ * 코드 그룹 삭제 (소속 세부 코드도 함께 삭제)
+ */
+function delete_code_group(string $groupCode): bool
+{
+    if (empty($groupCode)) return false;
+
+    $pdo = get_db_connection();
+    if ($pdo) {
+        try {
+            $stmt = $pdo->prepare("DELETE FROM code_group WHERE group_code = :group_code");
+            return $stmt->execute([':group_code' => $groupCode]);
+        } catch (\Throwable $e) {
+            // fallback
+        }
+    }
+
+    $mock = load_mock_codes();
+    $mock['groups'] = array_values(array_filter($mock['groups'], function ($g) use ($groupCode) {
+        return ($g['group_code'] ?? '') !== $groupCode;
+    }));
+    $mock['details'] = array_values(array_filter($mock['details'], function ($d) use ($groupCode) {
+        return ($d['group_code'] ?? '') !== $groupCode;
+    }));
+    return save_mock_codes($mock);
+}
+
+/**
+ * 세부 코드 목록 조회 (그룹별 필터 및 사용여부 필터 지원)
+ */
+function get_code_details(string $groupCode = '', bool $onlyActive = false): array
+{
+    $pdo = get_db_connection();
+    if ($pdo) {
+        try {
+            $sql = "SELECT d.*, g.group_name 
+                    FROM code_detail d 
+                    LEFT JOIN code_group g ON d.group_code = g.group_code 
+                    WHERE 1=1";
+            $params = [];
+            if ($groupCode !== '') {
+                $sql .= " AND d.group_code = :group_code";
+                $params[':group_code'] = $groupCode;
+            }
+            if ($onlyActive) {
+                $sql .= " AND d.is_use = 'Y'";
+            }
+            $sql .= " ORDER BY d.group_code ASC, d.sort_order ASC, d.id ASC";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute($params);
+            return $stmt->fetchAll();
+        } catch (\Throwable $e) {
+            // fallback
+        }
+    }
+
+    $mock = load_mock_codes();
+    $details = $mock['details'] ?? [];
+    $groupMap = [];
+    foreach ($mock['groups'] ?? [] as $g) {
+        $groupMap[$g['group_code']] = $g['group_name'] ?? '';
+    }
+
+    $filtered = [];
+    foreach ($details as $d) {
+        if ($groupCode !== '' && ($d['group_code'] ?? '') !== $groupCode) {
+            continue;
+        }
+        if ($onlyActive && ($d['is_use'] ?? 'Y') !== 'Y') {
+            continue;
+        }
+        $d['group_name'] = $groupMap[$d['group_code'] ?? ''] ?? '';
+        $filtered[] = $d;
+    }
+
+    usort($filtered, function ($a, $b) {
+        if (($a['group_code'] ?? '') !== ($b['group_code'] ?? '')) {
+            return strcmp($a['group_code'] ?? '', $b['group_code'] ?? '');
+        }
+        if (($a['sort_order'] ?? 0) === ($b['sort_order'] ?? 0)) {
+            return ($a['id'] ?? 0) <=> ($b['id'] ?? 0);
+        }
+        return ($a['sort_order'] ?? 0) <=> ($b['sort_order'] ?? 0);
+    });
+
+    return $filtered;
+}
+
+/**
+ * 단일 세부 코드 조회
+ */
+function get_code_detail(int $id): ?array
+{
+    if ($id <= 0) return null;
+
+    $pdo = get_db_connection();
+    if ($pdo) {
+        try {
+            $stmt = $pdo->prepare("SELECT * FROM code_detail WHERE id = :id LIMIT 1");
+            $stmt->execute([':id' => $id]);
+            $res = $stmt->fetch();
+            if ($res) return $res;
+        } catch (\Throwable $e) {
+            // fallback
+        }
+    }
+
+    $mock = load_mock_codes();
+    foreach ($mock['details'] ?? [] as $d) {
+        if ((int)($d['id'] ?? 0) === $id) {
+            return $d;
+        }
+    }
+    return null;
+}
+
+/**
+ * 신규 세부 코드 등록
+ */
+function insert_code_detail(array $data): bool
+{
+    $groupCode = trim($data['group_code'] ?? '');
+    $codeValue = trim($data['code_value'] ?? '');
+    $codeName = trim($data['code_name'] ?? '');
+    if (empty($groupCode) || empty($codeValue) || empty($codeName)) {
+        return false;
+    }
+
+    $sortOrder = (int)($data['sort_order'] ?? 0);
+    $isUse = ($data['is_use'] ?? 'Y') === 'N' ? 'N' : 'Y';
+    $extra1 = trim($data['extra_val_1'] ?? '');
+    $extra2 = trim($data['extra_val_2'] ?? '');
+
+    $pdo = get_db_connection();
+    if ($pdo) {
+        try {
+            $sql = "INSERT INTO code_detail 
+                    (group_code, code_value, code_name, sort_order, is_use, extra_val_1, extra_val_2, created_at, updated_at)
+                    VALUES (:group_code, :code_value, :code_name, :sort_order, :is_use, :extra_val_1, :extra_val_2, NOW(), NOW())";
+            $stmt = $pdo->prepare($sql);
+            return $stmt->execute([
+                ':group_code' => $groupCode,
+                ':code_value' => $codeValue,
+                ':code_name' => $codeName,
+                ':sort_order' => $sortOrder,
+                ':is_use' => $isUse,
+                ':extra_val_1' => $extra1,
+                ':extra_val_2' => $extra2
+            ]);
+        } catch (\Throwable $e) {
+            // fallback
+        }
+    }
+
+    $mock = load_mock_codes();
+    // 중복 체크
+    foreach ($mock['details'] as $d) {
+        if (($d['group_code'] ?? '') === $groupCode && ($d['code_value'] ?? '') === $codeValue) {
+            return false;
+        }
+    }
+
+    $newId = 1;
+    foreach ($mock['details'] as $d) {
+        if (($d['id'] ?? 0) >= $newId) {
+            $newId = (int)$d['id'] + 1;
+        }
+    }
+
+    $now = date('Y-m-d H:i:s');
+    $mock['details'][] = [
+        'id' => $newId,
+        'group_code' => $groupCode,
+        'code_value' => $codeValue,
+        'code_name' => $codeName,
+        'sort_order' => $sortOrder,
+        'is_use' => $isUse,
+        'extra_val_1' => $extra1,
+        'extra_val_2' => $extra2,
+        'created_at' => $now,
+        'updated_at' => $now
+    ];
+    return save_mock_codes($mock);
+}
+
+/**
+ * 세부 코드 수정
+ */
+function update_code_detail(int $id, array $data): bool
+{
+    if ($id <= 0) return false;
+    $codeValue = trim($data['code_value'] ?? '');
+    $codeName = trim($data['code_name'] ?? '');
+    if (empty($codeValue) || empty($codeName)) return false;
+
+    $sortOrder = (int)($data['sort_order'] ?? 0);
+    $isUse = ($data['is_use'] ?? 'Y') === 'N' ? 'N' : 'Y';
+    $extra1 = trim($data['extra_val_1'] ?? '');
+    $extra2 = trim($data['extra_val_2'] ?? '');
+
+    $pdo = get_db_connection();
+    if ($pdo) {
+        try {
+            $sql = "UPDATE code_detail 
+                    SET code_value = :code_value,
+                        code_name = :code_name,
+                        sort_order = :sort_order,
+                        is_use = :is_use,
+                        extra_val_1 = :extra_val_1,
+                        extra_val_2 = :extra_val_2,
+                        updated_at = NOW() 
+                    WHERE id = :id";
+            $stmt = $pdo->prepare($sql);
+            return $stmt->execute([
+                ':code_value' => $codeValue,
+                ':code_name' => $codeName,
+                ':sort_order' => $sortOrder,
+                ':is_use' => $isUse,
+                ':extra_val_1' => $extra1,
+                ':extra_val_2' => $extra2,
+                ':id' => $id
+            ]);
+        } catch (\Throwable $e) {
+            // fallback
+        }
+    }
+
+    $mock = load_mock_codes();
+    $found = false;
+    foreach ($mock['details'] as &$d) {
+        if ((int)($d['id'] ?? 0) === $id) {
+            $d['code_value'] = $codeValue;
+            $d['code_name'] = $codeName;
+            $d['sort_order'] = $sortOrder;
+            $d['is_use'] = $isUse;
+            $d['extra_val_1'] = $extra1;
+            $d['extra_val_2'] = $extra2;
+            $d['updated_at'] = date('Y-m-d H:i:s');
+            $found = true;
+            break;
+        }
+    }
+    if ($found) {
+        return save_mock_codes($mock);
+    }
+    return false;
+}
+
+/**
+ * 세부 코드 단건 삭제
+ */
+function delete_code_detail(int $id): bool
+{
+    if ($id <= 0) return false;
+
+    $pdo = get_db_connection();
+    if ($pdo) {
+        try {
+            $stmt = $pdo->prepare("DELETE FROM code_detail WHERE id = :id");
+            return $stmt->execute([':id' => $id]);
+        } catch (\Throwable $e) {
+            // fallback
+        }
+    }
+
+    $mock = load_mock_codes();
+    $beforeCnt = count($mock['details']);
+    $mock['details'] = array_values(array_filter($mock['details'], function ($d) use ($id) {
+        return (int)($d['id'] ?? 0) !== $id;
+    }));
+    if (count($mock['details']) < $beforeCnt) {
+        return save_mock_codes($mock);
+    }
+    return false;
+}
+
+/**
+ * 세부 코드 다건(일괄) 삭제
+ */
+function delete_code_details(array $ids): int
+{
+    $deletedCount = 0;
+    foreach ($ids as $id) {
+        $cleanId = (int)$id;
+        if ($cleanId > 0 && delete_code_detail($cleanId)) {
+            $deletedCount++;
+        }
+    }
+    return $deletedCount;
+}
+
+/**
+ * 그룹별 세부 코드 [code_value => code_name] 맵 반환 (폼 드롭다운 헬퍼)
+ */
+function get_codes_by_group(string $groupCode, bool $onlyActive = true): array
+{
+    $list = get_code_details($groupCode, $onlyActive);
+    $map = [];
+    foreach ($list as $row) {
+        $val = $row['code_value'] ?? '';
+        $name = $row['code_name'] ?? '';
+        if ($val !== '') {
+            $map[$val] = $name;
+        }
+    }
+    return $map;
+}
+
 

@@ -87,7 +87,7 @@ include __DIR__ . '/../../includes/header.php';
       <!-- 섹션 2: 일반이사 요금표 -->
       <div class="ui segment" style="border-radius: 12px; padding: 24px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); border-top: 4px solid #0284c7; margin-bottom: 24px;">
         <h3 style="font-size: 1.15rem; color: #075985; margin-top: 0; margin-bottom: 14px;">
-          <i class="table icon" style="color: #0284c7;"></i> 일반이사 표준 요금 기준표 (서울·수도권)
+          <i class="table icon" style="color: #0284c7;"></i> 일반이사 표준 요금 기준표 / 1층기준 (서울·수도권)
         </h3>
 
         <div class="ui responsive table-wrapper" style="overflow-x: auto;">
@@ -104,24 +104,24 @@ include __DIR__ . '/../../includes/header.php';
               <tr>
                 <td rowspan="2" style="font-weight: 700;">1톤 용달</td>
                 <td>기사 1명 (고객 도움)</td>
-                <td><strong style="color: #c026d3;">8 ~ 10 만원</strong></td>
-                <td><strong style="color: #c026d3;">10 ~ 12 만원</strong></td>
+                <td><strong style="color: #c026d3;">10 ~ 15 만원</strong></td>
+                <td><strong style="color: #c026d3;">12 ~ 17 만원</strong></td>
               </tr>
               <tr>
                 <td>전문 기사 1명 + 전문 인부 1명</td>
-                <td><strong>20 ~ 22 만원</strong></td>
-                <td><strong>22 ~ 25 만원</strong></td>
+                <td><strong>25 ~ 30 만원</strong></td>
+                <td><strong>27 ~ 32 만원</strong></td>
               </tr>
               <tr>
                 <td rowspan="2" style="font-weight: 700; background: #fafafa;">2.5톤 화물</td>
                 <td>기사 1명 (상하차 지원)</td>
-                <td><strong>18 ~ 20 만원</strong></td>
-                <td><strong>20 ~ 22 만원</strong></td>
+                <td><strong>20 ~ 23 만원</strong></td>
+                <td><strong>22 ~ 25 만원</strong></td>
               </tr>
               <tr>
                 <td>전문 기사 1명 + 전문 인부 1명</td>
-                <td><strong>35 ~ 40 만원</strong></td>
                 <td><strong>40 ~ 45 만원</strong></td>
+                <td><strong>45 ~ 50 만원</strong></td>
               </tr>
             </tbody>
           </table>

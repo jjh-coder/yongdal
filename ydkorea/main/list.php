@@ -46,7 +46,7 @@ var favoritetitle = "<b>용달코리아</b>" .replace("<b>","").replace("</b>","
 <!-------  회원테이블 모서리 ------>
  <style type="text/css">
 hgroup{
-border:4px solid #bfe1db; border-radius:5px; width:986px;  
+border:5px solid #bfe1db; border-radius:7px; width:986px;  
  }
 </style>
 <!--------- 회원테이블 모서리 ----->
@@ -579,31 +579,20 @@ function na_change_img_src(name, nsdoc, rpath, preload)
                         <tr>
                             <td>
  <!-- 2011/11/24 수정 시작 -->
- 
-                                <p style="margin-top:5px;">
+ 		
+                               <p style="margin-top:5px;">
 								
                                 <table width="986" align="certer" bgcolor="ffffff" border="0" cellpadding="0"  cellspacing="0">
                                <?php
-							   
-							  
-                                 $sql = "select * from company where id = '$id' order by rand()";
-
-
-
-                                 $result = mysqli_query($connect,$sql);
+							    $sql = "select * from company where id = '$id' order by rand()";
+                                $result = mysqli_query($connect,$sql);
                                  if(!$result){
                                  die(mysqli_error($connect));
                                   }
                                   $total_record = mysqli_num_rows($result);
-								  
-			  
-								  
                                   $row_cnt = ceil($total_record / 6);
 								  $result_cnt = 0;
-                                    
-                                    
-                                    
-                                    for ($i = 0; $i < $row_cnt; $i++) {
+								  for ($i = 0; $i < $row_cnt; $i++) {
                                     ?>
                                         <tr>
                                     <?php
@@ -628,20 +617,20 @@ function na_change_img_src(name, nsdoc, rpath, preload)
                                                 <table bgcolor="fffff" border="0" border color="" align="center" cellpadding="0"  cellspacing="0"
                                                        onClick="window.open('/jijum/<?php echo $code; ?>.html', '', 'width=565, height=467 left=0 top=0 scrollbars=no menubar=no directories=no, location=yes')"style="cursor:pointer;">
                                                     <tr>
-                                                        <td align="center">
+                                                       <td align="center">
                                                             <table width ="130"  bgcolor="ffffff" border="0" border color="blue" align="center" cellpadding="0"  cellspacing="0">
                                                                 <tr>
-                                                                    <td width="130" height="20" align="center"><b><font size="3" face="굴림" color="#003300"><?php echo $name; ?></b></font>
-                                                                    </td>
+                                                                  <td width="130" height="20" align="center"><b><font size="3" face="굴림" color="#003300"><?php echo $name; ?></b></font>
+                                                                  </td>
                                                                 </tr>
                                                                 <tr>
-                                                                    <td>
-                                                                        <table width ="130"  bgcolor="#f4feff" border="1" bordercolor="blue" align="center" cellpadding="0"  cellspacing="0"  border color="#0a255e" style="border-collapse:collapse;">
+                                                                   <td>
+                                                                       <table width ="130"  bgcolor="#f4feff" border="1" border color="blue" align="center" cellpadding="0"  cellspacing="0"  border color="#0a255e" style="border-collapse:collapse;">
                                                                             <tr>
                                                                                 <td width="130" height="50" align="center"><font color="#ff6688"><b><?php echo $explain; ?></b></font></td>
                                                                             </tr>
                                                                             <tr>
-                                                                                <td width="130" bgcolor="#5555ff" height="22" align="center" valign="bottom"><b><font face="굴림" size="3" color="#ffffff"><?php echo $tel; ?></span></font></b></td>
+                                                                                <td width="130" bgcolor="#68ffff" height="22" align="center" valign="middle"><b><font face="굴림" size="3" color="#ffffff"><?php echo $tel; ?></span></font></b></td>
                                                                             </tr>
                                                                         </table>
                                                                     </td>

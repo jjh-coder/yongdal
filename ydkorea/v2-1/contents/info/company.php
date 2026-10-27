@@ -48,7 +48,7 @@ include __DIR__ . '/../../includes/header.php';
       
       <div class="ydk-ceo-quote">
         "BOX 한 개, 의자 하나라도 내 물건처럼 소중히 다루고,<br>
-        형이나 동생처럼, 언니나 동생처럼 속마음을 편하게 터놓고 부탁할 수 있는 친근하고 든든한 곳 —<br>
+        형이나 동생처럼, 언니나 동생처럼 속마음을 편하게 터놓고 부탁할 수 있는 친근하고 든든한 곳 <br>
         그것이 바로 용달코리아가 추구하는 진정한 서비스의 가치입니다."
       </div>
 
@@ -121,7 +121,7 @@ include __DIR__ . '/../../includes/header.php';
         <tbody>
           <tr>
             <th scope="row">상호명</th>
-            <td><?= e(BIZ_NAME) ?> (<?= e(SITE_NAME) ?>)</td>
+            <td><?= e(BIZ_NAME) ?></td>  
           </tr>
           <tr>
             <th scope="row">대표자</th>
@@ -129,7 +129,7 @@ include __DIR__ . '/../../includes/header.php';
           </tr>
           <tr>
             <th scope="row">화물운송주선</th>
-            <td>관허 4-42호</td>
+            <td>관허 4042호</td>
           </tr>
           <tr>
             <th scope="row">사업자등록번호</th>

@@ -152,7 +152,7 @@ include __DIR__ . '/../../includes/header.php';
             <i class="question circle outline icon"></i> 추가 확인이 필요한 막연한 질문 예시
           </h3>
           <p style="font-size:15px; color:#742A2A; margin-bottom:16px; line-height:1.5;">
-            아래처럼만 질문해 주시면 세부 조건을 다시 여쭤보아야 해서 상담 시간이 다소 길어질 수 있습니다.
+            아래처럼 질문을 하시면 세부 조건을 다시 여쭤봐야 해서 상담 시간이 다소 길어집니다.
           </p>
           <ul style="padding-left:20px; margin:0; font-size:15px; color:#4A5568; line-height:1.8;">
             <li>"아저씨, 용달차 한 대 얼마예요?"</li>
@@ -161,7 +161,7 @@ include __DIR__ . '/../../includes/header.php';
             <li>"여기서 부산까지 얼마죠?"</li>
           </ul>
           <div style="margin-top:16px; padding:10px 14px; background:rgba(229,62,62,0.08); border-radius:6px; font-size:14px; color:#9B2C2C;">
-            <i class="info circle icon"></i> 짐의 크기나 이동 거리(동 단위)가 없으면 운임 안내가 어렵습니다.
+            <i class="info circle icon"></i> 차량 종류와 운송 물품, 출발·도착지가 없으면 운송비를 산출할 수가 없습니다!
           </div>
         </div>
       </div>
@@ -173,7 +173,7 @@ include __DIR__ . '/../../includes/header.php';
             <i class="check circle outline icon"></i> 단 1분 만에 정확한 견적이 나오는 추천 질문
           </h3>
           <p style="font-size:15px; color:#22543D; margin-bottom:16px; line-height:1.5;">
-            동 단위 위치와 물량 형태를 한 번에 말씀해 주시면 가장 경제적인 운임을 즉시 산출해 드립니다.
+            차량 종류,운송 물품,출발·도착지를 알려주시면 정확한 운송비를 산출할 수가 있습니다!
           </p>
           <ul style="padding-left:20px; margin:0; font-size:15px; color:#2D3748; line-height:1.8;">
             <li>"<strong>서울 마장동 3층(엘리베이터)에서 구리시 수택동 1층</strong>으로 박스 15개와 소형 냉장고 운송 견적 문의합니다."</li>
@@ -181,7 +181,7 @@ include __DIR__ . '/../../includes/header.php';
             <li>"<strong>서울 영등포에서 부산 사상구까지</strong> 파레트 1개(약 400kg) 혼적(합바) 가능한가요?"</li>
           </ul>
           <div style="margin-top:16px; padding:10px 14px; background:rgba(56,161,105,0.1); border-radius:6px; font-size:14px; color:#22543D; font-weight:600;">
-            <i class="thumbs up outline icon"></i> 짐의 내용과 출발·도착 동을 알려주시면 직거래 최저 요금을 찾아드립니다!
+            <i class="thumbs up outline icon"></i> 차량의 종류,운송 물품,출발·도착지를 알려주시면 직거래 최저 요금을 찾아드립니다!
           </div>
         </div>
       </div>
@@ -208,7 +208,7 @@ include __DIR__ . '/../../includes/header.php';
         <div class="content">
           <strong style="font-size:16px;">독차(단독 운송)와 합바(혼적)의 차이가 무엇인가요?</strong>
           <div style="color:var(--ydk-muted); font-size:15px; margin-top:4px;">
-            독차는 차량 전체를 고객님 단독으로 이용하여 원하는 시간에 즉시 출발·도착하는 방식이며, 합바(혼적)는 장거리 지방 운송 시 같은 방향 화물과 적재함을 나누어 실어 운송료를 최대 30~50% 절감하는 알뜰 운송 방식입니다.
+            독차는 차량 전체를 고객님 단독으로 이용하여 원하는 시간에 즉시 출발·도착하는 방식이며, 합바(혼적은 당착이나 내일착으로)는 장거리 지방 운송 시 같은 방향 화물과 적재함을 나누어 실어 운송료를 최대 30~40% 절감하는 알뜰 운송 방식입니다.
           </div>
         </div>
       </div>
