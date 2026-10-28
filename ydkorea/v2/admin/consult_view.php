@@ -17,22 +17,39 @@ if (!$consult) {
 $saveMessage = '';
 $saveError = '';
 
-// 상태 및 메모 수정 처리
+// 1. 상태/메모 수정 또는 삭제 처리
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $newStatus = trim($_POST['status'] ?? '');
-    $adminMemo = trim($_POST['admin_memo'] ?? '');
+    $action = $_POST['action'] ?? 'update';
 
-    if (in_array($newStatus, ['접수', '상담중', '배차완료', '취소'])) {
-        $ok = update_consult_status($id, $newStatus, $adminMemo);
-        if ($ok) {
-            $saveMessage = '상담 처리 상태 및 관리자 메모가 성공적으로 저장되었습니다.';
-            // 최신 데이터 다시 로드
-            $consult = get_consult_by_id($id);
+    // 삭제 처리
+    if ($action === 'delete') {
+        if (delete_consult_item($id)) {
+            $_SESSION['admin_flash'] = [
+                'type' => 'positive',
+                'message' => "상담 내역(#{$id})이 성공적으로 삭제되었습니다."
+            ];
+            header('Location: ' . url('admin/consult_list.php'));
+            exit;
         } else {
-            $saveError = '저장 처리 중 오류가 발생했습니다.';
+            $saveError = '상담 내역 삭제 처리 중 오류가 발생했습니다.';
         }
     } else {
-        $saveError = '올바른 처리 상태를 선택해 주세요.';
+        // 상태 및 메모 저장
+        $newStatus = trim($_POST['status'] ?? '');
+        $adminMemo = trim($_POST['admin_memo'] ?? '');
+
+        if (in_array($newStatus, ['접수', '상담중', '배차완료', '취소'])) {
+            $ok = update_consult_status($id, $newStatus, $adminMemo);
+            if ($ok) {
+                $saveMessage = '상담 처리 상태 및 관리자 메모가 성공적으로 저장되었습니다.';
+                // 최신 데이터 다시 로드
+                $consult = get_consult_by_id($id);
+            } else {
+                $saveError = '저장 처리 중 오류가 발생했습니다.';
+            }
+        } else {
+            $saveError = '올바른 처리 상태를 선택해 주세요.';
+        }
     }
 }
 
@@ -61,10 +78,16 @@ $st = $consult['status'] ?? '접수';
         <span class="ydk-badge-status <?= e($st) ?>" style="margin-left: 10px;"><?= e($st) ?></span>
       </h1>
     </div>
-    <div>
+    <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
       <a href="tel:<?= preg_replace('/[^0-9]/', '', $consult['tel']) ?>" class="ui huge button" style="background-color: var(--ydk-adm-accent); color: #FFFFFF;">
         <i class="phone icon"></i> 고객에게 바로 전화 걸기
       </a>
+      <form method="post" action="<?= e($_SERVER['REQUEST_URI']) ?>" onsubmit="return confirm('이 상담 내역(#<?= (int)$consult['id'] ?>)을 정말로 영구 삭제하시겠습니까?\n삭제 후에는 복구할 수 없습니다.');" style="margin: 0;">
+        <input type="hidden" name="action" value="delete">
+        <button type="submit" class="ui negative button" style="height: 48px; font-weight: 700;">
+          <i class="trash alternate icon"></i> 삭제
+        </button>
+      </form>
     </div>
   </div>
 
@@ -175,6 +198,15 @@ $st = $consult['status'] ?? '접수';
         <a href="<?= url('admin/consult_list.php') ?>" class="ui fluid basic button" style="height: 44px; display: flex; align-items: center; justify-content: center;">
           <i class="list icon"></i> 상담 목록으로 돌아가기
         </a>
+      </div>
+
+      <div style="margin-top: 10px;">
+        <form method="post" action="<?= e($_SERVER['REQUEST_URI']) ?>" onsubmit="return confirm('이 상담 내역(#<?= (int)$consult['id'] ?>)을 정말로 영구 삭제하시겠습니까?\n삭제 후에는 복구할 수 없습니다.');" style="margin: 0;">
+          <input type="hidden" name="action" value="delete">
+          <button type="submit" class="ui fluid negative basic button" style="height: 40px; display: flex; align-items: center; justify-content: center;">
+            <i class="trash alternate outline icon"></i> 이 상담 내역 영구 삭제
+          </button>
+        </form>
       </div>
     </div>
   </div>

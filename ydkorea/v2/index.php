@@ -1,12 +1,17 @@
 <?php
 /**
- * 용달코리아 v2 메인 페이지 (PHP 7.4.33, 반응형 웹)
+ * 용달코리아 v2 메인 페이지 (PHP 7.4.33, 반응형 웹, Deep Navy 테마)
  */
 require_once __DIR__ . '/includes/config.php';
 require_once __DIR__ . '/includes/functions.php';
+require_once __DIR__ . '/admin/includes/db.php';
 
 $pageTitle = '용달코리아 대표번호 1688-2404 용달화물 및 이사 용달차 안내 전국 화물 네트워크';
 $pageDescription = '서울시 성동구에 위치한 용달코리아 대표번호 1688-2404. 용달, 1톤~5톤 화물, 용달이사, 원룸이사, 리프트차, 탑차, 전국 화물 네트워크 직거래 연결';
+
+// 메인 노출용 공지사항 및 묻고답하기 최신 3건
+$mainNotices = get_notice_list('', 3);
+$mainQas = get_qa_list('', '', 3);
 
 // 서울 25개 구 데이터
 $seoulAreas = [
@@ -86,296 +91,306 @@ $metroAreas = [
 
 // 바로가기 15개 서비스 데이터
 $quickServices = [
-    ['name' => 'best 용달', 'desc' => '신속·친절 우수 용달', 'url' => legacy('main/list.php?id=07'), 'icon' => 'truck'],
-    ['name' => '1.4t / 2.5t / 5t', 'desc' => '중·대형 화물 트럭', 'url' => legacy('main/list.php?id=08'), 'icon' => 'shipping fast'],
-    ['name' => '탑차 (1t~5t)', 'desc' => '비·눈 걱정 없는 탑차', 'url' => legacy('main/list.php?id=09'), 'icon' => 'box'],
-    ['name' => '리프트 차', 'desc' => '중량물·장비 전용 리프트', 'url' => legacy('main/list.php?id=10'), 'icon' => 'level up alternate'],
-    ['name' => '지역 차량 (서울·경기)', 'desc' => '수도권 차주 직거래', 'url' => legacy('main/area_01.html'), 'icon' => 'map marker alternate'],
-    ['name' => '지역 차량 (광역시)', 'desc' => '전국 광역시 차주 안내', 'url' => legacy('main/area_02.html'), 'icon' => 'map signs'],
-    ['name' => '화물 예약', 'desc' => '온라인 간편 화물 예약', 'url' => legacy('main/freight.html'), 'icon' => 'calendar check'],
-    ['name' => '지방 화물 안내', 'desc' => '장거리·지방 리턴공차', 'url' => legacy('main/car_list_03.html'), 'icon' => 'road'],
-    ['name' => '이삿짐 예상 단가', 'desc' => '투명한 이사 요금 기준', 'url' => legacy('main/forecast_trt.html'), 'icon' => 'calculator'],
-    ['name' => '용달 이사', 'desc' => '원룸·소형 소호 이사', 'url' => legacy('main/yd_mov.html'), 'icon' => 'home'],
-    ['name' => '원룸 이사', 'desc' => '학생·직장인 맞춤 이사', 'url' => legacy('main/room_mov.html'), 'icon' => 'user'],
-    ['name' => '사무실 이사', 'desc' => '기업·사무실 이전 전문', 'url' => legacy('main/off_mov.html'), 'icon' => 'building'],
-    ['name' => '일반 이사', 'desc' => '알뜰하고 편리한 이사', 'url' => legacy('main/gen_mov.html'), 'icon' => 'dolly'],
-    ['name' => '보관 이사', 'desc' => '안전한 화물 보관 이사', 'url' => legacy('main/kee_mov.html'), 'icon' => 'warehouse'],
-    ['name' => '포장 이사', 'desc' => '포장부터 정리까지 원스톱', 'url' => legacy('main/pack_mov.html'), 'icon' => 'boxes'],
+    ['name' => 'best 용달', 'desc' => '신속·친절 우수 용달', 'url' => url('contents/company/company_list.php?id=07'), 'icon' => 'truck'],
+    ['name' => '1.4t / 2.5t / 5t', 'desc' => '중·대형 화물 트럭', 'url' => url('contents/company/company_list.php?id=08'), 'icon' => 'shipping fast'],
+    ['name' => '탑차 (1t~5t)', 'desc' => '비·눈 걱정 없는 탑차', 'url' => url('contents/company/company_list.php?id=09'), 'icon' => 'box'],
+    ['name' => '리프트 차', 'desc' => '중량물·장비 전용 리프트', 'url' => url('contents/company/company_list.php?id=10'), 'icon' => 'level up alternate'],
+    ['name' => '지역 차량 (서울·경기)', 'desc' => '수도권 차주 직거래', 'url' => url('contents/info/area_01.php'), 'icon' => 'map marker alternate'],
+    ['name' => '지역 차량 (광역시)', 'desc' => '전국 광역시 차주 안내', 'url' => url('contents/info/area_02.php'), 'icon' => 'map signs'],
+    ['name' => '화물 예약', 'desc' => '온라인 간편 화물 예약', 'url' => url('contents/info/freight.php'), 'icon' => 'calendar check'],
+    ['name' => '지방 화물 안내', 'desc' => '장거리·지방 리턴공차', 'url' => url('contents/info/car_list_03.php'), 'icon' => 'road'],
+    ['name' => '이삿짐 예상 단가', 'desc' => '투명한 이사 요금 기준', 'url' => url('contents/info/forecast_trt.php'), 'icon' => 'calculator'],
+    ['name' => '용달 이사', 'desc' => '원룸·소형 소호 이사', 'url' => url('contents/info/yd_mov.php'), 'icon' => 'home'],
+    ['name' => '원룸 이사', 'desc' => '학생·직장인 맞춤 이사', 'url' => url('contents/info/room_mov.php'), 'icon' => 'user'],
+    ['name' => '사무실 이사', 'desc' => '기업·사무실 이전 전문', 'url' => url('contents/info/off_mov.php'), 'icon' => 'building'],
+    ['name' => '일반 이사', 'desc' => '알뜰하고 편리한 이사', 'url' => url('contents/info/gen_mov.php'), 'icon' => 'dolly'],
+    ['name' => '보관 이사', 'desc' => '안전한 화물 보관 이사', 'url' => url('contents/info/kee_mov.php'), 'icon' => 'warehouse'],
+    ['name' => '포장 이사', 'desc' => '포장부터 정리까지 원스톱', 'url' => url('contents/info/pack_mov.php'), 'icon' => 'boxes'],
 ];
 
 include __DIR__ . '/includes/header.php';
 ?>
 
+<?php
+$freightServices = array_slice($quickServices, 0, 8);
+$moveServices = array_slice($quickServices, 8);
+$regionTabs = [
+    ['key' => 'seoul', 'label' => '서울', 'areas' => $seoulAreas],
+    ['key' => 'gyeonggi', 'label' => '경기·인천', 'areas' => $gyeonggiAreas],
+    ['key' => 'metro', 'label' => '광역시·지방', 'areas' => $metroAreas],
+];
+$procedure = [
+    ['icon' => 'phone', 'title' => '전화 상담'],
+    ['icon' => 'truck', 'title' => '차량 배차'],
+    ['icon' => 'box', 'title' => '화물 상차'],
+    ['icon' => 'shipping fast', 'title' => '안전 운송'],
+    ['icon' => 'check circle', 'title' => '하차 완료'],
+];
+$areaInfos = [
+    ['서울·수도권 화물안내', 'contents/area/area_info_01.php'],
+    ['충청권 화물안내', 'contents/area/area_info_02.php'],
+    ['호남권 화물안내', 'contents/area/area_info_03.php'],
+    ['영남권 화물안내', 'contents/area/area_info_04.php'],
+    ['강원·제주 화물안내', 'contents/area/area_info_05.php'],
+    ['리턴 공차 안내', 'contents/area/area_info_06.php'],
+    ['용달 운임 기준표', 'contents/area/area_info_07.php'],
+    ['화물 취급 요령', 'contents/area/area_info_08.php'],
+];
+?>
+
 <main class="ydk-container ydk-main">
 
-  <!-- 1. 히어로 배너 (반응형 지원) -->
-  <section class="ydk-hero" aria-label="용달코리아 핵심 서비스 소개">
-    <div class="ydk-hero-content">
-      <div class="ydk-hero-badge"><i class="check circle icon"></i> 전국 화물·용달 직거래 네트워크</div>
-      <h1 class="ydk-hero-title">
-        용달 이사부터 5톤 전국 화물까지<br>
-        한 통의 전화로 빠르고 친절하게
-      </h1>
-      <p class="ydk-hero-desc">
-        거품 없는 직거래 운송 요금과 검증된 전문 차주 연결로<br class="ydk-hide-mobile">
-        소형 용달부터 대형 전국 화물까지 신속·정확하게 운송해 드립니다.
-      </p>
-      <div class="ydk-hero-actions">
-        <a href="tel:<?= SITE_PHONE_TEL ?>" class="ui button ydk-hero-btn ydk-cta">
-          <i class="phone icon"></i> 전화 상담 (<?= SITE_PHONE ?>)
+  <!-- 1. 히어로 배너: 그래픽 일러스트 + 헤드라인 + 즉시 전화 상담 -->
+  <section class="ydk2-hero" aria-label="용달코리아 소개">
+    <!-- 하단 도로 & 차선 레이어 -->
+    <div class="ydk2-hero-road"></div>
+    <div class="ydk2-hero-lane"></div>
+
+    <!-- 좌측 헤드라인 & 콜투액션 (텍스트 좌측 배치) -->
+    <div class="ydk2-hero-content">
+      <h1 class="ydk2-hero-title">용달·화물·이사,<br>한 통의 전화로 끝냅니다</h1>
+      <p class="ydk2-hero-desc">전국 차주와 직거래로 연결해 드립니다.</p>
+      <div class="ydk2-hero-actions">
+        <a href="tel:<?= SITE_PHONE_TEL ?>" class="ui button ydk2-btn-call">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="#ffd2bd" aria-hidden="true"><path d="M6.6 10.8a15 15 0 0 0 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1A17 17 0 0 1 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1z"></path></svg>
+          <span>전화 상담 <?= SITE_PHONE ?></span>
         </a>
-        <a href="#regionSection" class="ui button ydk-hero-btn ydk-outline">
-          <i class="map marker alternate icon"></i> 지역 차주 찾기
-        </a>
-        <a href="<?= legacy('main/freight.html') ?>" class="ui button ydk-hero-btn ydk-outline">
-          <i class="calendar check icon"></i> 화물 예약
-        </a>
+        <a href="#regionSection" class="ydk2-hero-link">지역 차주 찾기 <i class="angle right icon"></i></a>
+      </div>
+    </div>
+
+    <!-- 우측 일러스트 그래픽 (도시 빌딩 + 하늘 구름 + 이삿짐 박스 + 용달 트럭) -->
+    <div class="ydk2-hero-visual">
+      <div class="ydk2-hero-fade"></div>
+      <svg viewBox="0 0 640 296" preserveAspectRatio="xMidYMax meet" class="ydk2-hero-svg" fill="none" aria-hidden="true">
+        <!-- 원경·근경 빌딩군 -->
+        <g fill="#206a9d">
+          <rect x="20" y="170" width="60" height="130"></rect>
+          <rect x="100" y="110" width="50" height="190"></rect>
+          <rect x="170" y="150" width="70" height="150"></rect>
+          <rect x="260" y="70" width="40" height="230"></rect>
+          <rect x="320" y="130" width="80" height="170"></rect>
+          <rect x="420" y="90" width="44" height="210"></rect>
+          <rect x="485" y="150" width="70" height="150"></rect>
+          <rect x="570" y="120" width="50" height="180"></rect>
+        </g>
+        <g fill="#1a5c8a">
+          <rect x="40" y="200" width="40" height="100"></rect>
+          <rect x="200" y="190" width="40" height="110"></rect>
+          <rect x="345" y="170" width="55" height="130"></rect>
+          <rect x="510" y="190" width="45" height="110"></rect>
+        </g>
+
+        <!-- 하늘 구름 -->
+        <g fill="#ffffff">
+          <g opacity=".95">
+            <ellipse cx="130" cy="56" rx="46" ry="16"></ellipse>
+            <circle cx="112" cy="46" r="18"></circle>
+            <circle cx="146" cy="42" r="22"></circle>
+          </g>
+          <g opacity=".85">
+            <ellipse cx="470" cy="38" rx="34" ry="11"></ellipse>
+            <circle cx="458" cy="30" r="13"></circle>
+            <circle cx="484" cy="28" r="15"></circle>
+          </g>
+          <g opacity=".7">
+            <ellipse cx="330" cy="92" rx="26" ry="8"></ellipse>
+            <circle cx="322" cy="86" r="10"></circle>
+          </g>
+        </g>
+
+        <!-- 적재함 위 이삿짐 박스 -->
+        <rect x="104" y="92" width="86" height="66" rx="3" fill="#d9b88a"></rect>
+        <path d="M104 108h86M147 92v16" stroke="#b8935f" stroke-width="3"></path>
+        <rect x="196" y="112" width="74" height="46" rx="3" fill="#e4c79d"></rect>
+        <path d="M196 126h74M233 112v14" stroke="#b8935f" stroke-width="3"></path>
+        <rect x="132" y="38" width="72" height="54" rx="3" fill="#e4c79d"></rect>
+        <path d="M132 52h72M168 38v14" stroke="#b8935f" stroke-width="3"></path>
+
+        <!-- 트럭 적재함 프레임 & 바디 -->
+        <rect x="84" y="158" width="250" height="84" rx="4" fill="#1b365d"></rect>
+        <g stroke="#2d5a96" stroke-width="3">
+          <path d="M84 176h250M84 194h250M84 212h250M84 230h250"></path>
+        </g>
+        <rect x="70" y="240" width="400" height="16" rx="3" fill="#0f1f3a"></rect>
+
+        <!-- 트럭 운전석 캡 (오렌지 포인트) & 창문 -->
+        <path d="M344 142h74l40 52v48H344z" fill="#c8440c"></path>
+        <path d="M404 154h-48v40h82z" fill="#d6ecfa"></path>
+        <path d="M404 154l12 0 22 40h-24z" fill="#ffffff" opacity=".35"></path>
+        <rect x="344" y="212" width="114" height="6" fill="#a83805"></rect>
+        <rect x="446" y="216" width="14" height="12" rx="2" fill="#ffd25a"></rect>
+        <rect x="456" y="236" width="18" height="20" rx="3" fill="#9aa4b0"></rect>
+
+        <!-- 대형 휠 & 타이어 -->
+        <g>
+          <circle cx="150" cy="262" r="32" fill="#0f1f3a"></circle>
+          <circle cx="150" cy="262" r="16" fill="#cfd6df"></circle>
+          <circle cx="150" cy="262" r="6" fill="#0f1f3a"></circle>
+          <circle cx="400" cy="262" r="32" fill="#0f1f3a"></circle>
+          <circle cx="400" cy="262" r="16" fill="#cfd6df"></circle>
+          <circle cx="400" cy="262" r="6" fill="#0f1f3a"></circle>
+        </g>
+      </svg>
+    </div>
+  </section>
+
+  <!-- 2. 핵심 3블록 -->
+  <section class="ydk2-section" aria-label="핵심 서비스">
+    <div class="ui three column stackable grid">
+      <div class="column">
+        <div class="ydk2-block">
+          <i class="truck icon ydk2-block-icon"></i>
+          <h2 class="ydk2-block-title">용달·화물</h2>
+          <p class="ydk2-block-text">1톤부터 5톤, 탑차, 리프트차까지</p>
+          <a href="<?= url('contents/company/company_list.php?id=07') ?>" class="ydk2-block-link">차량 보기 <i class="angle right icon"></i></a>
+        </div>
+      </div>
+      <div class="column">
+        <div class="ydk2-block">
+          <i class="dolly icon ydk2-block-icon"></i>
+          <h2 class="ydk2-block-title">이사</h2>
+          <p class="ydk2-block-text">원룸·사무실·포장 이사까지</p>
+          <a href="<?= url('contents/info/yd_mov.php') ?>" class="ydk2-block-link">이사 안내 <i class="angle right icon"></i></a>
+        </div>
+      </div>
+      <div class="column">
+        <div class="ydk2-block">
+          <i class="map marker alternate icon ydk2-block-icon"></i>
+          <h2 class="ydk2-block-title">지역 차주 찾기</h2>
+          <p class="ydk2-block-text">내 동네 차주와 바로 연결</p>
+          <a href="#regionSection" class="ydk2-block-link">지역 선택 <i class="angle right icon"></i></a>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- 2. 상담 전 확인사항 안내 박스 (고대비 연한 네이비 틴트 박스) -->
-  <section class="ui message ydk-notice-box" aria-label="상담 전 확인사항">
-    <div class="header">
-      <i class="info circle icon"></i> 상담 전화를 하실 때는 이런 내용을 꼭 알고서 전화해 주세요!
+  <!-- 3. 차종·이사 탭 -->
+  <section class="ydk2-section" aria-label="차종 및 이사 서비스 바로가기">
+    <h2 class="ydk2-title">원하는 서비스를 고르세요</h2>
+    <div class="ui menu ydk2-tabs">
+      <a class="item active" data-tab="svc-freight">화물·차종</a>
+      <a class="item" data-tab="svc-move">이사</a>
     </div>
-    <ul>
-      <li>전문 상담원이 신속히 견적을 안내해 드리므로 <strong>차량 종류</strong>와 <strong>화물의 물동량</strong>을 미리 확인해 주세요.</li>
-      <li>정확한 <strong>출발지와 도착지</strong> (예: 서울 종로구 2가에서 서초구 서초동까지 / 경기 군포에서 부산 해운대구까지)를 알려주세요.</li>
-      <li>더 자세한 상담 준비 요령은 <a href="<?= legacy('main/tel_con.html') ?>"><strong>[전화 상담 방법 안내]</strong></a>에서 확인하실 수 있습니다.</li>
-    </ul>
+    <div class="ui tab active" data-tab="svc-freight">
+      <div class="ydk2-links">
+        <?php foreach ($freightServices as $svc): ?>
+          <a href="<?= e($svc['url']) ?>" class="ydk2-link"><i class="<?= e($svc['icon']) ?> icon"></i> <?= e($svc['name']) ?></a>
+        <?php endforeach; ?>
+      </div>
+    </div>
+    <div class="ui tab" data-tab="svc-move">
+      <div class="ydk2-links">
+        <?php foreach ($moveServices as $svc): ?>
+          <a href="<?= e($svc['url']) ?>" class="ydk2-link"><i class="<?= e($svc['icon']) ?> icon"></i> <?= e($svc['name']) ?></a>
+        <?php endforeach; ?>
+      </div>
+    </div>
   </section>
 
-  <!-- 3. 바로가기 15대 서비스 그리드 (반응형: 5열 -> 태블릿 3열 -> 모바일 2열) -->
-  <section class="ydk-quick-grid" aria-label="맞춤 차종 및 이사 서비스">
-    <div class="ydk-section-header">
-      <h2 class="ydk-section-title"><i class="th icon"></i> 맞춤 차종 및 이사 서비스</h2>
-      <span class="ydk-section-sub">필요하신 화물 차종이나 이사 서비스를 선택하시면 상세 안내 페이지로 이동합니다.</span>
-    </div>
-    <div class="ui five column doubling stackable grid">
-      <?php foreach ($quickServices as $svc): ?>
-        <div class="column">
-          <a href="<?= e($svc['url']) ?>" class="ydk-service-card">
-            <div class="ydk-service-icon"><i class="<?= e($svc['icon']) ?> icon"></i></div>
-            <div class="ydk-service-name"><?= e($svc['name']) ?></div>
-            <div class="ydk-service-desc"><?= e($svc['desc']) ?></div>
-          </a>
-        </div>
+  <!-- 4. 지역 선택 탭 -->
+  <section id="regionSection" class="ydk2-section" aria-label="지역별 차량 안내">
+    <h2 class="ydk2-title">지역을 선택하세요</h2>
+    <div class="ui menu ydk2-tabs">
+      <?php foreach ($regionTabs as $i => $tab): ?>
+        <a class="item<?= $i === 0 ? ' active' : '' ?>" data-tab="reg-<?= e($tab['key']) ?>"><?= e($tab['label']) ?></a>
       <?php endforeach; ?>
     </div>
-  </section>
+    <?php foreach ($regionTabs as $i => $tab): ?>
+      <div class="ui tab<?= $i === 0 ? ' active' : '' ?>" data-tab="reg-<?= e($tab['key']) ?>">
+        <div class="ydk2-links">
+          <?php foreach ($tab['areas'] as $area): ?>
+            <a href="<?= url("contents/company/company_list.php?id={$area['id']}") ?>" class="ydk2-link"><?= e($area['name']) ?></a>
+          <?php endforeach; ?>
+        </div>
+      </div>
+    <?php endforeach; ?>
 
-  <!-- 4. 지역 차량 찾기 (서울 / 경기 / 광역시) - 모바일 터치 최적화 -->
-  <section id="regionSection" class="ydk-region-section" aria-label="전국 지역별 차량 직거래 안내">
-    <div class="ydk-section-header">
-      <h2 class="ydk-section-title"><i class="map marked alternate icon"></i> 전국 지역별 차량 직거래 안내</h2>
-      <span class="ydk-section-sub">원하시는 지역을 클릭하시면 해당 지역에 등록된 차주와 바로 직거래 상담을 하실 수 있습니다.</span>
-    </div>
-
-    <!-- 서울 지역 (25개 구) -->
-    <div class="ydk-region-group">
-      <div class="ydk-region-label">
-        <span class="ydk-region-badge">서울 특별시</span>
-        <span>서울 전 지역 (25개 구)</span>
-      </div>
-      <div class="ydk-region-pills">
-        <?php foreach ($seoulAreas as $area): ?>
-          <a href="<?= legacy("main/list.php?id={$area['id']}") ?>" class="ydk-region-pill">
-            <?= e($area['name']) ?>
-          </a>
-        <?php endforeach; ?>
-      </div>
-    </div>
-
-    <!-- 경기/인천 지역 -->
-    <div class="ydk-region-group">
-      <div class="ydk-region-label">
-        <span class="ydk-region-badge">경기도 · 인천</span>
-        <span>수도권 주요 시/구</span>
-      </div>
-      <div class="ydk-region-pills">
-        <?php foreach ($gyeonggiAreas as $area): ?>
-          <a href="<?= legacy("main/list.php?id={$area['id']}") ?>" class="ydk-region-pill">
-            <?= e($area['name']) ?>
-          </a>
-        <?php endforeach; ?>
-      </div>
-    </div>
-
-    <!-- 전국 광역시 및 주요 도시 -->
-    <div class="ydk-region-group">
-      <div class="ydk-region-label">
-        <span class="ydk-region-badge">전국 광역시 · 지방</span>
-        <span>전국 주요 광역시 및 지방 도시</span>
-      </div>
-      <div class="ydk-region-pills">
-        <?php foreach ($metroAreas as $area): ?>
-          <a href="<?= legacy("main/list.php?id={$area['id']}") ?>" class="ydk-region-pill">
-            <?= e($area['name']) ?>
-          </a>
-        <?php endforeach; ?>
+    <div class="ui accordion ydk2-accordion">
+      <div class="title"><i class="dropdown icon"></i> 지역별 운송 정보 안내</div>
+      <div class="content">
+        <div class="ydk2-links">
+          <?php foreach ($areaInfos as $info): ?>
+            <a href="<?= url($info[1]) ?>" class="ydk2-link"><?= e($info[0]) ?></a>
+          <?php endforeach; ?>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- 5. 2단 위젯 (반응형: PC 2열 -> 모바일 1열 스택) -->
-  <section class="ydk-board-section" aria-label="게시판 및 이용 안내">
+  <!-- 5. 이용 절차 (아이콘 + 제목) -->
+  <section class="ydk2-section" aria-label="이용 절차">
+    <h2 class="ydk2-title">이용은 이렇게 간단합니다</h2>
+    <ol class="ydk2-steps">
+      <?php foreach ($procedure as $step): ?>
+        <li class="ydk2-step">
+          <i class="<?= e($step['icon']) ?> icon ydk2-step-icon"></i>
+          <span><?= e($step['title']) ?></span>
+        </li>
+      <?php endforeach; ?>
+    </ol>
+    <p class="ydk2-note">상담 전 확인할 내용은 <a href="<?= url('contents/tel/tel.php') ?>">전화 상담 방법 안내</a>에서 볼 수 있습니다.</p>
+  </section>
+
+  <!-- 6. 공지 / 묻고답하기 (3줄) -->
+  <section class="ydk2-section" aria-label="공지사항과 묻고답하기">
     <div class="ui two column stackable grid">
-
-      <!-- 좌측: 공지사항 & 묻고답하기 -->
       <div class="column">
-        <!-- 공지사항 -->
-        <div class="ydk-board-card ydk-board-card-spaced">
-          <div class="ydk-board-header">
-            <h3 class="ydk-board-title"><i class="bullhorn icon"></i> 공지사항</h3>
-            <a href="<?= legacy('bbs/zboard.php?id=gongji') ?>" class="ydk-board-more">더보기 <i class="angle right icon"></i></a>
-          </div>
-          <div class="ui list ydk-board-list">
-            <div class="item">
-              <a href="<?= legacy('bbs/zboard.php?id=gongji') ?>">
-                <span class="ydk-board-item-title">스폰서 부정 클릭은 형사 처벌을 받습니다</span>
-                <span class="ydk-board-badge">공지</span>
-              </a>
-            </div>
-            <div class="item">
-              <a href="<?= legacy('bbs/zboard.php?id=gongji') ?>">
-                <span class="ydk-board-item-title">용달코리아 전국 차주 회원을 상시 모집합니다</span>
-                <span class="ydk-board-badge">안내</span>
-              </a>
-            </div>
-            <div class="item">
-              <a href="<?= legacy('bbs/zboard.php?id=gongji') ?>">
-                <span class="ydk-board-item-title">부정 클릭 및 허위 문의에 대한 법적 대응 안내</span>
-                <span class="ydk-board-badge">필독</span>
-              </a>
-            </div>
-            <div class="item">
-              <a href="<?= legacy('bbs/zboard.php?id=gongji') ?>">
-                <span class="ydk-board-item-title">용달코리아 광고 안내 및 회원 위치 서비스 소개</span>
-                <span class="ydk-board-badge">안내</span>
-              </a>
-            </div>
-          </div>
+        <div class="ydk2-board-head">
+          <h2 class="ydk2-board-title">공지사항</h2>
+          <a href="<?= url('contents/notice/notice.php') ?>" class="ydk2-more">더보기 <i class="angle right icon"></i></a>
         </div>
-
-        <!-- 묻고답하기 (견적문의) -->
-        <div class="ydk-board-card">
-          <div class="ydk-board-header">
-            <h3 class="ydk-board-title"><i class="comments icon"></i> 묻고답하기 (견적 문의)</h3>
-            <a href="<?= legacy('bbs/zboard.php?id=Qwrite') ?>" class="ydk-board-more">문의 작성 <i class="angle right icon"></i></a>
-          </div>
-          <div class="ui list ydk-board-list">
-            <div class="item">
-              <a href="<?= legacy('bbs/zboard.php?id=Qwrite') ?>">
-                <span class="ydk-board-item-title">용달 화물 견적 문의 드립니다</span>
-                <span class="ydk-board-badge">견적</span>
-              </a>
-            </div>
-            <div class="item">
-              <a href="<?= legacy('bbs/zboard.php?id=Qwrite') ?>">
-                <span class="ydk-board-item-title">원룸 이사 및 소형 화물 운송 문의</span>
-                <span class="ydk-board-badge">이사</span>
-              </a>
-            </div>
-            <div class="item">
-              <a href="<?= legacy('bbs/zboard.php?id=Qwrite') ?>">
-                <span class="ydk-board-item-title">개인 가구(침대, 책상) 운송 비용 견적 부탁드립니다</span>
-                <span class="ydk-board-badge">가구</span>
-              </a>
-            </div>
-            <div class="item">
-              <a href="<?= legacy('bbs/zboard.php?id=Qwrite') ?>">
-                <span class="ydk-board-item-title">서울-지방 장거리 화물 견적 요청</span>
-                <span class="ydk-board-badge">지방</span>
-              </a>
-            </div>
-          </div>
-        </div>
+        <ul class="ydk2-board">
+          <?php if (!empty($mainNotices)): ?>
+            <?php foreach ($mainNotices as $n): ?>
+              <li>
+                <a href="<?= url('contents/notice/notice_view.php?id=' . (int)$n['id']) ?>">
+                  <?php if (!empty($n['is_pinned'])): ?>
+                    <span style="color: #EF4444; font-weight: 700; margin-right: 2px;">[공지]</span>
+                  <?php endif; ?>
+                  <?= e($n['title']) ?>
+                </a>
+              </li>
+            <?php endforeach; ?>
+          <?php else: ?>
+            <li><a href="<?= url('contents/notice/notice.php') ?>">등록된 공지사항이 없습니다.</a></li>
+          <?php endif; ?>
+        </ul>
       </div>
-
-      <!-- 우측: 서비스 이용 단계 & 차주 모집 배너 -->
       <div class="column">
-        <div class="ydk-board-card">
-          <div class="ydk-board-header">
-            <h3 class="ydk-board-title"><i class="tasks icon"></i> 화물·용달 이용 절차 안내</h3>
-            <a href="<?= legacy('main/service.html') ?>" class="ydk-board-more">상세보기 <i class="angle right icon"></i></a>
-          </div>
-
-          <div class="ydk-steps-wrap">
-            <div class="ydk-step-item">
-              <div class="ydk-step-num">STEP 1</div>
-              <div class="ydk-step-title">전화 상담</div>
-              <div class="ydk-step-desc">1688-2404 견적 접수</div>
-            </div>
-            <div class="ydk-step-item">
-              <div class="ydk-step-num">STEP 2</div>
-              <div class="ydk-step-title">차량 배차</div>
-              <div class="ydk-step-desc">전담 차주 즉시 배정</div>
-            </div>
-            <div class="ydk-step-item">
-              <div class="ydk-step-num">STEP 3</div>
-              <div class="ydk-step-title">화물 상차</div>
-              <div class="ydk-step-desc">약속 시간 출발지 적재</div>
-            </div>
-            <div class="ydk-step-item">
-              <div class="ydk-step-num">STEP 4</div>
-              <div class="ydk-step-title">안전 운송</div>
-              <div class="ydk-step-desc">신속·안전 목적지 이동</div>
-            </div>
-            <div class="ydk-step-item">
-              <div class="ydk-step-num">STEP 5</div>
-              <div class="ydk-step-title">하차 완료</div>
-              <div class="ydk-step-desc">도착지 확인 운송 완료</div>
-            </div>
-          </div>
-
-          <!-- 차주 모집 배너 카드 -->
-          <div class="ydk-driver-banner">
-            <div>
-              <div class="ydk-driver-title"><i class="id card outline icon"></i> 용달코리아 차주 회원 상시 모집</div>
-              <div class="ydk-driver-desc">1톤 용달, 리프트차, 탑차, 2.5톤~5톤 화물 차주님을 모십니다.</div>
-            </div>
-            <div>
-              <a href="<?= legacy('main/car_club.html') ?>" class="ui small inverted button">
-                회원 가입 안내 <i class="arrow right icon"></i>
-              </a>
-            </div>
-          </div>
-
-          <!-- 지역 상세 정보 바로가기 -->
-          <div class="ydk-area-info-wrap">
-            <div class="ydk-area-info-title">
-              <i class="info circle icon"></i> 지역별 운송 정보 안내
-            </div>
-            <div class="ydk-area-info-pills">
-              <a href="<?= legacy('main/area_info_01.html') ?>" class="ydk-region-pill ydk-pill-sm">서울·수도권 화물안내</a>
-              <a href="<?= legacy('main/area_info_02.html') ?>" class="ydk-region-pill ydk-pill-sm">충청권 화물안내</a>
-              <a href="<?= legacy('main/area_info_03.html') ?>" class="ydk-region-pill ydk-pill-sm">호남권 화물안내</a>
-              <a href="<?= legacy('main/area_info_04.html') ?>" class="ydk-region-pill ydk-pill-sm">영남권 화물안내</a>
-              <a href="<?= legacy('main/area_info_05.html') ?>" class="ydk-region-pill ydk-pill-sm">강원·제주 화물안내</a>
-              <a href="<?= legacy('main/area_info_06.html') ?>" class="ydk-region-pill ydk-pill-sm">리턴 공차 안내</a>
-              <a href="<?= legacy('main/area_info_07.html') ?>" class="ydk-region-pill ydk-pill-sm">용달 운임 기준표</a>
-              <a href="<?= legacy('main/area_info_08.html') ?>" class="ydk-region-pill ydk-pill-sm">화물 취급 요령</a>
-            </div>
-          </div>
-
+        <div class="ydk2-board-head">
+          <h2 class="ydk2-board-title">묻고답하기</h2>
+          <a href="<?= url('contents/qa/qa.php') ?>" class="ydk2-more">전체보기 <i class="angle right icon"></i></a>
         </div>
+        <ul class="ydk2-board">
+          <?php if (!empty($mainQas)): ?>
+            <?php foreach ($mainQas as $q): ?>
+              <li>
+                <a href="<?= url('contents/qa/qa_view.php?id=' . (int)$q['id']) ?>">
+                  <?php if (($q['status'] ?? '') === '답변완료'): ?>
+                    <span style="color: #16A34A; font-weight: 700; margin-right: 2px;">[완료]</span>
+                  <?php else: ?>
+                    <span style="color: #EA580C; font-weight: 700; margin-right: 2px;">[대기]</span>
+                  <?php endif; ?>
+                  <?= e($q['title']) ?>
+                </a>
+              </li>
+            <?php endforeach; ?>
+          <?php else: ?>
+            <li><a href="<?= url('contents/qa/qa_write.php') ?>">첫 번째 질문을 등록해 보세요!</a></li>
+          <?php endif; ?>
+        </ul>
       </div>
-
     </div>
+    <p class="ydk2-note"><i class="id card outline icon"></i> 차주님이신가요? <a href="<?= url('contents/club/car_club.php') ?>">차주 회원 모집 안내</a></p>
   </section>
 
-  <!-- 6. 모바일 전용 하단 고정 전화 상담 바 (767px 이하에서만 노출) -->
-  <aside class="ydk-mobile-callbar" aria-label="모바일 즉시 전화상담">
-    <a href="tel:<?= SITE_PHONE_TEL ?>" class="ydk-mobile-callbar-btn">
-      <i class="phone icon"></i>
-      <span class="ydk-mobile-callbar-label">지금 바로 전화 상담</span>
-      <strong class="ydk-mobile-callbar-num"><?= SITE_PHONE ?></strong>
-    </a>
-  </aside>
+  <!-- 7. 마무리 전화 CTA -->
+  <section class="ydk2-closing" aria-label="전화 상담">
+    <h2 class="ydk2-closing-title">지금 바로 전화 주세요</h2>
+    <a href="tel:<?= SITE_PHONE_TEL ?>" class="ydk2-closing-phone"><i class="phone icon"></i> <?= SITE_PHONE ?></a>
+  </section>
 
 </main>
 
-<?php
-include __DIR__ . '/includes/footer.php';
-?>
+<?php include __DIR__ . '/includes/footer.php'; ?>

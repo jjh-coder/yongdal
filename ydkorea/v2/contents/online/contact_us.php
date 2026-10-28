@@ -51,9 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } elseif ($privacy !== 'Y') {
             $errorMessage = '개인정보 수집 및 이용 안내에 동의해 주셔야 접수가 가능합니다.';
         } else {
-            // DB 또는 Mock 데이터 저장
-            require_once __DIR__ . '/../../admin/includes/db.php';
-            insert_consult_item([
+            $consultData = [
                 'name' => $name,
                 'tel' => $tel,
                 'email' => $email,
@@ -63,11 +61,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'end_area' => $endArea,
                 'story' => $story,
                 'client_ip' => $_SERVER['REMOTE_ADDR'] ?? ''
-            ]);
+            ];
 
-            $isSuccess = true;
+            // 1. DB 또는 Mock 데이터 저장
+            require_once __DIR__ . '/../../admin/includes/db.php';
+            insert_consult_item($consultData);
+
+            // 2. 관리자 알림 이메일 발송 (main/formmail_01.php 연동)
+            send_consult_mail($consultData);
+
+            // 3. 완료 페이지 전달용 세션 데이터 생성
+            $_SESSION['consult_success'] = $consultData;
+            $_SESSION['consult_id'] = 'YDK-' . date('Ymd') . '-' . strtoupper(substr(md5(uniqid((string)mt_rand(), true)), 0, 4));
+            $_SESSION['consult_time'] = date('Y년 m월 d일 H시 i분');
+
             // 새 CSRF 토큰 발급 (중복 전송 방지)
             $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+
+            // 4. 완료 페이지로 이동 (PRG 패턴: 새로고침 시 중복 제출 방지)
+            header('Location: ' . url('contents/online/complete.php'));
+            exit;
         }
     }
 }
@@ -233,19 +246,10 @@ include __DIR__ . '/../../includes/header.php';
       <a href="tel:<?= SITE_PHONE_TEL ?>" class="ui huge button ydk-btn-call">
         <i class="phone icon"></i> 전화 상담 (<?= SITE_PHONE ?>)
       </a>
-      <a href="<?= url('contents/info/compnay.php') ?>" class="ui huge inverted button">
+      <a href="<?= url('contents/info/company.php') ?>" class="ui huge inverted button">
         <i class="building outline icon"></i> 회사 소개 보기
       </a>
     </div>
-  </aside>
-
-  <!-- 모바일 전용 하단 고정 전화 상담 바 -->
-  <aside class="ydk-mobile-callbar" aria-label="모바일 즉시 전화상담">
-    <a href="tel:<?= SITE_PHONE_TEL ?>" class="ydk-mobile-callbar-btn">
-      <i class="phone icon"></i>
-      <span class="ydk-mobile-callbar-label">지금 바로 전화 상담</span>
-      <strong class="ydk-mobile-callbar-num"><?= SITE_PHONE ?></strong>
-    </a>
   </aside>
 
 </main>

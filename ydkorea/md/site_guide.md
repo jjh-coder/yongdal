@@ -1,7 +1,7 @@
-# site_guide.md — 용달코리아(ydkorea.co.kr) 사이트 개편 총괄 가이드 (v2-1, 반응형 웹)
+# site_guide.md — 용달코리아(ydkorea.co.kr) 사이트 개편 총괄 가이드 (v2, 반응형 웹)
 
 > 이 문서는 AI 및 작업자가 용달코리아 사이트를 구축·개편할 때 **반드시 준수해야 하는 총괄 가이드라인**입니다.
-> 기준 작업 경로는 **`/v2-1/`** 이며, 이전 `/v2/`의 디자인 요소를 계승하되 보다 직관적이고 군더더기 없는 구조로 통합 개편을 진행합니다.
+> 기준 작업 경로는 **`/v2/`** 이며, `v2-1`에서 검증·단순화한 반응형 아키텍처를 `/v2/`로 정식 승격·통합 완료하였습니다.
 > `[TODO]` 표시는 직접 정해서 채워 넣으세요. 비어 있으면 AI가 임의로 정하지 말고 질문해야 합니다.
 
 ---
@@ -12,7 +12,7 @@
 2. 한 번에 한 페이지씩 작업한다. 작업 전 해당 페이지의 기존 기능 목록을 먼저 나열하고 확인받는다.
 3. 기존 기능(링크, 게시판, 폼 동작)을 누락하지 않는다.
 4. 불확실하면 추측하지 말고 질문한다.
-5. **모든 신규 파일은 `/v2-1/` 안에만 만든다.** 루트의 기존 파일·폴더는 수정하거나 삭제하지 않는다.
+5. **모든 신규 파일은 `/v2/` 안에만 만든다.** 루트의 기존 파일·폴더는 수정하거나 삭제하지 않는다.
 6. 파일 경로는 하드코딩하지 말고 `url()`, `legacy()`, `BASE_URL`을 사용한다. (4장 참조)
 7. **반응형 웹 사이트다.** PC(1920px/1280px), 태블릿(768px~1199px), 모바일(320px~767px)을 모두 지원하며, 화면 크기에 맞추어 레이아웃이 자연스럽게 적응해야 한다.
 8. **서버 설정(`.htaccess`, Apache 설정 등)은 수정할 수 없다.** 전환은 `index.html`의 리다이렉트로만 처리한다. (4-5 참조)
@@ -27,7 +27,7 @@
   1. 전화 상담 (1688-2404) — 모바일 환경에서는 '원클릭 즉시 통화'가 최우선
   2. 지역/차종별 차주 찾기
   3. 화물 예약 / 견적 문의 게시판 작성
-- **개편 범위**: **반응형 웹 단일 사이트로 개편** (PC, 태블릿, 모바일 기기 모두 `/v2-1/`로 통합 수용)
+- **개편 범위**: **반응형 웹 단일 사이트로 개편** (PC, 태블릿, 모바일 기기 모두 `/v2/`로 통합 수용)
 - **개편 방향**: 불필요한 장식 요소를 배제하고 직관적인 히어로, 탭 기반 서비스/지역 분류, 전화 상담 중심의 간결하고 빠른 UX 제공
 - **주요 사용자**: 30~60대 다양한 기기(PC, 스마트폰) 사용자 → 큰 글씨, 명확한 고대비 메뉴, 단순한 흐름, 손쉬운 터치
 - **법적 고지**: "통신판매 주선업(중개자)이며 운송 중 사고 책임은 당사자에게 있음" 문구는 **모든 페이지 푸터에 유지**
@@ -41,7 +41,7 @@
 | 메인 영역 | 직관적 히어로, 3대 핵심 블록, 화물/이사 탭, 3대 권역(서울/경기·인천/지방) 지역 탭, 이용 절차(5단계), 공지사항/Q&A, 마무리 전화 CTA |
 | 푸터 | 상호, 대표자, 사업자번호, 통신판매업 신고번호, 주소, 대표전화, 이메일, 계좌안내, 중개자 법적 고지, 접속 카운터/로그 |
 
-> 기존 게시판은 zboard 기반(`/bbs/zboard.php`). **게시판 URL과 동작은 변경하지 않고 겉모양만 개편**하며, v2-1에서는 `legacy('bbs/zboard.php?id=...')`로 링크한다.
+> 기존 게시판은 zboard 기반(`/bbs/zboard.php`). **게시판 URL과 동작은 변경하지 않고 겉모양만 개편**하며, v2에서는 `legacy('bbs/zboard.php?id=...')`로 링크한다.
 
 ---
 
@@ -50,7 +50,7 @@
 | 항목 | 규칙 |
 |---|---|
 | 서버 | **PHP 7.4.33** (후이즈 호스팅, **서버 설정 수정 불가**) |
-| 작업 폴더 | **`/v2-1/`** (기존 파일 및 `/v2/` 파일은 직접 수정하지 않음) |
+| 작업 폴더 | **`/v2/`** (구버전은 `/v2_backup/`에 보관, 기존 루트 파일은 직접 수정하지 않음) |
 | UI | **Fomantic-UI 2.9.x** (원본 Semantic UI 사용 금지) |
 | JS | jQuery 3.x + Fomantic-UI JS (필요한 곳에만) |
 | 번들러 | 사용하지 않음 (CDN + 정적 파일) |
@@ -123,19 +123,30 @@ PHP 7.4는 지원이 종료된 버전이므로 **PHP 8 문법을 쓰면 오류�
 | `images/`, `jijum/`, `yd/`, `tel-1688-2404/`, `cgi-bin/`, `LOGSCRIPT/` | 기존 리소스 (`jijum_old/` 98개 백업 폴더 및 `tel-1688-2404/kch1414_DB.sql` 35MB DB 덤프 인입) |
 | `.htaccess` 등 서버 설정 | **수정 불가. 건드리지 않는다** |
 
-### 4-2. 신규 개편 폴더: `/v2-1/`
+### 4-2. 정식 개편 폴더: `/v2/`
 
-모든 신규 작업물은 **`/v2-1/` 폴더 안에서만** 만든다. 기존 폴더 및 `/v2/`와 파일 이름이 겹치지 않게 분리 관리한다.
+모든 신규 작업물은 **`/v2/` 폴더 안에서만** 관리한다. (기존 구버전은 `/v2_backup/`에 보관)
 
 ```
-/v2-1/
+/v2/
 ├─ index.php              # 메인 페이지 (간결화·탭 기반 UI 적용 완료)
 ├─ includes/
-│   ├─ config.php         # 사이트 상수 (BASE_URL='/v2-1', 전화번호, 사업자 정보, 법적 고지)
+│   ├─ config.php         # 사이트 상수 (BASE_URL='/v2', 전화번호, 사업자 정보, 법적 고지)
 │   ├─ functions.php      # e(), url(), legacy() 공통 헬퍼
 │   ├─ header.php         # <head> + 상단 유틸바 + 로고/전화 + 상단 7대 메뉴 + 모바일 햄버거 드로어
 │   └─ footer.php         # 푸터 + 카운터/분석 스크립트 + 모바일 듀얼 플로팅 바(견적+전화)
 ├─ contents/              # 하위 콘텐츠 페이지
+│   ├─ area/              # 지역별 운송 정보 안내 (main/area_info_*.html 리뉴얼 완료)
+│   │   ├─ _area_nav.php    # 8개 지역 정보 공통 가로 스크롤 탭 내비게이션
+│   │   ├─ index.php        # area_info_01.php 기본 리다이렉트
+│   │   ├─ area_info_01.php # 서울·수도권 화물안내 (도심 지하주차장 탑차, 2026-10 운임표)
+│   │   ├─ area_info_02.php # 충청권 화물안내 (대전·세종·충남북 중부 물류 허브)
+│   │   ├─ area_info_03.php # 호남권 화물안내 (광주·전남북 서남권 장거리 및 농수산물 특화)
+│   │   ├─ area_info_04.php # 영남권 화물안내 (부산·대구·울산·경남북 산업벨트 경부축 야간특급)
+│   │   ├─ area_info_05.php # 강원·제주 화물안내 (산간 결빙 대비 및 제주 카페리 도선 연계)
+│   │   ├─ area_info_06.php # 리턴 공차 안내 (복귀 빈차 매칭, 혼적/합바 30~50% 운임 절감)
+│   │   ├─ area_info_07.php # 용달 운임 기준표 (1톤 표준 거리별 운임표 및 이사 옵션 요금)
+│   │   └─ area_info_08.php # 화물 취급 요령 (포장 가이드, 적재물 보험, 관허 4042호 계약 5계명)
 │   ├─ info/
 │   │   ├─ company.php      # 회사 소개 (main/info.html 리뉴얼 완료, compnay.php 호환)
 │   │   ├─ area_01.php      # 수도권 지역 차량 (서울·경기) 안내 (area_seoul.php 호환)
@@ -220,7 +231,7 @@ PHP 7.4는 지원이 종료된 버전이므로 **PHP 8 문법을 쓰면 오류�
 ```php
 <?php
 // 사이트 URL 설정 (루트 승격 시 '' 로 변경)
-define('BASE_URL', '/v2-1');
+define('BASE_URL', '/v2');
 
 // 대표 연락처 정보
 define('SITE_PHONE', '1688-2404');
@@ -290,15 +301,15 @@ include __DIR__ . '/../../includes/header.php';
 
 ### 4-5. 배포 / 전환 절차 (index.html 리다이렉트 방식)
 
-서버 설정을 수정할 수 없으므로 **루트 `index.html`을 리다이렉트 파일로 교체**해서 `/v2-1/`로 보낸다. 반응형 웹 사이트이므로 PC와 모바일 모두 단일 `/v2-1/` 주소로 통합 연결된다.
+서버 설정을 수정할 수 없으므로 **루트 `index.html`을 리다이렉트 파일로 교체**해서 `/v2/`로 보낸다. 반응형 웹 사이트이므로 PC와 모바일 모두 단일 `/v2/` 주소로 통합 연결된다.
 
 | 단계 | 내용 |
 |---|---|
-| 1. 개발 | `https://www.ydkorea.co.kr/v2-1/` 로 직접 접속해서 확인. 기존 `index.html`은 건드리지 않는다 |
+| 1. 개발 | `https://www.ydkorea.co.kr/v2/` 로 직접 접속해서 확인. 기존 `index.html`은 건드리지 않는다 |
 | 2. 검수 | 본 문서 11장 체크리스트 통과. 모바일(360px, 390px), 태블릿(768px), PC(1280px, 1920px) 확인 |
 | 3. 백업 | FTP에서 `index.html`을 **`index_legacy.html`로 복사**하고, 로컬 PC에도 원본을 보관한다 |
 | 4. 전환 | `index.html`을 아래 리다이렉트 파일로 **덮어쓴다** |
-| 5. 확인 | PC·태블릿·모바일 접속 시 `/v2-1/`로 이동하는지, 뒤로가기 시 무한 반복이 없는지 확인 |
+| 5. 확인 | PC·태블릿·모바일 접속 시 `/v2/`로 이동하는지, 뒤로가기 시 무한 반복이 없는지 확인 |
 | 6. 롤백 | `index_legacy.html` 내용을 `index.html`로 되돌려 덮어쓴다 (1분 이내 복구) |
 
 **리다이렉트용 `index.html`**
@@ -311,17 +322,17 @@ include __DIR__ . '/../../includes/header.php';
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>용달코리아 대표번호 1688-2404 용달화물 및 이사 용달차 안내 전국 화물 네트워크</title>
 <meta name="description" content="서울시 성동구에 위치한 용달코리아 대표번호 1688-2404. 용달, 1톤~5톤 화물, 용달이사, 원룸이사, 리프트차, 탑차, 전국 화물 네트워크 직거래 연결">
-<link rel="canonical" href="https://www.ydkorea.co.kr/v2-1/">
+<link rel="canonical" href="https://www.ydkorea.co.kr/v2/">
 <script>
 (function () {
     // 단일 반응형 사이트로 즉시 이동. replace()를 써서 뒤로가기 무한 반복을 방지
-    location.replace('/v2-1/');
+    location.replace('/v2/');
 })();
 </script>
-<noscript><meta http-equiv="refresh" content="0;url=/v2-1/"></noscript>
+<noscript><meta http-equiv="refresh" content="0;url=/v2/"></noscript>
 </head>
 <body>
-<p><a href="/v2-1/">용달코리아 메인으로 이동</a></p>
+<p><a href="/v2/">용달코리아 메인으로 이동</a></p>
 </body>
 </html>
 ```
@@ -600,7 +611,27 @@ AI가 코드를 만들 때 아래 파일이 웹에서 접근 가능하다는 가
   - 1톤 차량 기준 이사 요금: 단순운송 `6~9만 원`, 일반이사(고객도움) `10~15만 원` / 손없는날 `12~17만 원`, 인부 1명 포함 `25~30만 원` / 손없는날 `27~32만 원`, 반포장 `35~38만 원` / 손없는날 `38~40만 원`, 포장이사 `35~40만 원` / 손없는날 `40~45만 원`.
   - 2.5톤 차량 기준 이사 요금: 기사 1명 상하차 `20~23만 원` / 손없는날 `22~25만 원`, 인부 1명 포함 `40~45만 원` / 손없는날 `45~50만 원`.
 
-### 13) 향후 유지보수 및 차기 작업 대상
+### 13) 지역별 운송 정보 안내 (`/v2/contents/area/area_info_01.php ~ 08.php`) — [완료]
+
+- **기존 원본**: `main/area_info_01.html` ~ `main/area_info_08.html` 전면 개편
+- **파일 경로**:
+  - `/v2/contents/area/_area_nav.php` (8개 가이드 공통 터치 탭 내비게이션)
+  - `/v2/contents/area/index.php` (기본 01 리다이렉트)
+  - `/v2/contents/area/area_info_01.php` (서울·수도권 화물안내)
+  - `/v2/contents/area/area_info_02.php` (충청권 화물안내)
+  - `/v2/contents/area/area_info_03.php` (호남권 화물안내)
+  - `/v2/contents/area/area_info_04.php` (영남권 화물안내)
+  - `/v2/contents/area/area_info_05.php` (강원·제주 화물안내)
+  - `/v2/contents/area/area_info_06.php` (리턴 공차 및 혼적 알선 안내)
+  - `/v2/contents/area/area_info_07.php` (용달 운임 기준표 및 요금 책정 가이드)
+  - `/v2/contents/area/area_info_08.php` (화물 취급 요령 및 안전 수칙)
+- **개편 방향**:
+  - 레거시 Namo WebEditor 정적 테이블과 단순 텍스트 반복을 탈피하여, 각 권역별 지리·산업 특성에 맞춘 전문 가이드로 전면 고도화.
+  - 기존 레거시의 핵심 지침(관허 4042호 확인, 상차 전 차량번호·기사연락처·차고지 확인, 적재물 보험 5톤 기준, 분실/파손 현장 확인 서면 작성)을 100% 보존·강화.
+  - 2026-10 최신 현실화 운임 기준 동기화 및 데스크톱 구조화 표(`ui unstackable celled structured table`)와 모바일 스마트 카드(`ydk-mobile-pricing-list`) 듀얼 렌더링 적용.
+  - 8개 페이지 상단에 유기적인 탭 내비게이션(`_area_nav.php`)을 배치하여 원클릭 순환 이동 지원.
+
+### 14) 향후 유지보수 및 차기 작업 대상
 
 1. 사용자 편의 기능: 메인 화면 실시간 운임 계산기 위젯 (Interactive Cost Estimator)
 2. 지역업체 리스트(`company_list.php`) 실시간 인풋 검색 및 차종별 필터 칩 고도화
@@ -700,7 +731,9 @@ AI가 코드를 만들 때 아래 파일이 웹에서 접근 가능하다는 가
 | **레거시 메인 원본** | `ydkorea/main/info.html`<br>`ydkorea/main/list.php` | • 회사 소개 본문 문구(대표 민경철, 카톡/메신저 채널 등) 정돈<br>• 지점 리스트 박스 디자인 및 테이블 마크업 정돈 |
 | **온라인 상담 완료 페이지** | `v2-1/contents/online/complete.php`<br>`v2-1/contents/online/online_con_01.php`<br>`v2-1/contents/online/contact_us.php` | • 견적 문의 저장 및 메일 발송 완료 시 전용 완료 페이지(`complete.php`)로 PRG 리다이렉트<br>• 접수 번호/일시 및 신청 요약 카드, 3단계 진행 절차 안내, 빠른 유선 연결(1688-2404 / 1688-2407) 제공<br>• 레거시 `main/online_con_01.html` 리뉴얼 및 별칭 `online_con_01.php` 지원 |
 | **온라인 상담 삭제 기능** | `v2-1/admin/consult_list.php`<br>`v2-1/admin/consult_view.php`<br>`v2-1/admin/index.php`<br>`v2-1/admin/includes/db.php` | • 상담 내역 단건 삭제 및 선택 일괄 삭제 기능 추가 (`delete_consult_item`, `delete_consult_items`)<br>• 목록(`consult_list.php`): 체크박스 전체 선택/개별 선택 일괄 삭제, 각 행별 단건 삭제 버튼 및 안전 Confirm 제공<br>• 상세(`consult_view.php`): 상단 헤더 및 관리 카드 하단에 영구 삭제 버튼 제공 (삭제 후 목록 리다이렉트)<br>• 대시보드(`index.php`): 최근 접수 내역 관리 열에 단건 삭제 버튼 및 즉시 삭제 지원 |
-| **공통 코드 관리 시스템** | `v2-1/admin/code_list.php`<br>`v2-1/admin/sql/schema_code.sql`<br>`v2-1/admin/data/code_mock.json`<br>`v2-1/admin/includes/db.php`<br>`v2-1/admin/includes/header.php`<br>`v2-1/admin/index.php` | • 사이트 전반 공통 코드 체계(그룹코드-상세코드 2계층) 신설<br>• DDL 스크립트 작성(`schema_code.sql`): `code_group`, `code_detail` 테이블 및 차종, 이사종류, 상담상태 등 기초 시드 데이터 포함<br>• 관리자 UI(`code_list.php`): 좌측(5/16) 대분류 그룹코드 목록, 우측(11/16) 세부코드 목록 2단 분할 레이아웃<br>• 그룹/세부코드 등록, 수정, 단건 삭제 및 세부코드 다중 선택 일괄 삭제 Fomantic-UI 모달 UI 완비<br>• Mock JSON fallback(`code_mock.json`) 및 DB 헬퍼 함수(`get_codes_by_group()` 등) 구현 |
+| **공통 코드 관리 시스템** | `v2/admin/code_list.php`<br>`v2/admin/sql/schema_code.sql`<br>`v2/admin/data/code_mock.json`<br>`v2/admin/includes/db.php`<br>`v2/admin/includes/header.php`<br>`v2/admin/index.php` | • 사이트 전반 공통 코드 체계(그룹코드-상세코드 2계층) 신설<br>• DDL 스크립트 작성(`schema_code.sql`): `code_group`, `code_detail` 테이블 및 차종, 이사종류, 상담상태 등 기초 시드 데이터 포함<br>• 관리자 UI(`code_list.php`): 좌측(5/16) 대분류 그룹코드 목록, 우측(11/16) 세부코드 목록 2단 분할 레이아웃<br>• 그룹/세부코드 등록, 수정, 단건 삭제 및 세부코드 다중 선택 일괄 삭제 Fomantic-UI 모달 UI 완비<br>• Mock JSON fallback(`code_mock.json`) 및 DB 헬퍼 함수(`get_codes_by_group()` 등) 구현 |
+| **v2 정식 승격 및 폴더 이전** | `v2/`<br>`v2_backup/`<br>`v2/includes/config.php`<br>`v2/includes/header.php`<br>`site_guide.md` | • 반응형 신규 시스템(`v2-1`)을 정식 서비스 경로인 `/v2/`로 통합 승격 완료<br>• 기존 초기 `v2`는 `v2_backup/`으로 안전 보관 처리 후 `v2-1` 폴더 제거 완료<br>• `BASE_URL`을 `'/v2'`로 단일 동기화 및 캐노니컬 URL, 관리자 링크 최신화 완료 |
+
 
 
 

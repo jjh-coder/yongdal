@@ -32,7 +32,7 @@ body.ydk-admin-body {
 
 .ydk-admin-container {
   width: 100%;
-  max-width: 1280px;
+  max-width: 1440px;
   margin: 0 auto;
   padding: 0 16px;
 }
@@ -51,15 +51,27 @@ body.ydk-admin-body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 60px;
+  min-height: 56px;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 4px 0;
+}
+
+.ydk-admin-nav-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
 }
 
 .ydk-admin-brand {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   text-decoration: none;
   color: #FFFFFF;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .ydk-admin-brand:hover {
@@ -76,27 +88,31 @@ body.ydk-admin-body {
 }
 
 .ydk-admin-title {
-  font-size: 18px;
+  font-size: 17px;
   font-weight: 700;
+  white-space: nowrap;
 }
 
 .ydk-admin-menu {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 3px;
+  flex-wrap: nowrap;
 }
 
 .ydk-admin-menu a.nav-item {
   color: #CBD5E1;
   text-decoration: none;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 600;
-  padding: 8px 14px;
+  padding: 7px 11px;
   border-radius: 6px;
   transition: all 0.15s ease;
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
+  white-space: nowrap; /* 단어 줄내림 원천 차단 */
+  flex-shrink: 0;
 }
 
 .ydk-admin-menu a.nav-item:hover,
@@ -114,6 +130,28 @@ body.ydk-admin-body {
 .ydk-admin-menu a.btn-logout:hover {
   background-color: #DC2626;
   color: #FFFFFF;
+}
+
+@media (max-width: 1280px) {
+  .ydk-admin-nav-left {
+    gap: 10px;
+  }
+  .ydk-admin-menu a.nav-item {
+    font-size: 13.5px;
+    padding: 6px 9px;
+    gap: 4px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .ydk-admin-nav-inner {
+    padding: 8px 0;
+  }
+  .ydk-admin-menu {
+    overflow-x: auto;
+    max-width: 100%;
+    padding-bottom: 2px;
+  }
 }
 
 /* 통계 카드 (Dashboard) */
